@@ -2,6 +2,7 @@ body{
     display: flex;
     flex-direction: column;
     align-items: center;
+    background-color: rgb(94, 29, 29);
 }
 
 canvas{
