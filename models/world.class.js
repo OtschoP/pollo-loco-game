@@ -9,6 +9,10 @@ class World {
         new Cloud()
     ]
 
+    backgrounds = [
+        new Background()
+    ]
+
 
     ctx;
 
@@ -23,11 +27,16 @@ class World {
 
         
         this.ctx.drawImage(this.character.img, this.character.x, this.character.y, this.character.width, this.character.height);
+
         this.enemies.forEach(enemy => {
             this.ctx.drawImage(enemy.img, enemy.x, enemy.y, enemy.width, enemy.height);
         });
         this.clouds.forEach(cloud => {
             this.ctx.drawImage(cloud.img, cloud.x, cloud.y, cloud.width, cloud.height);
+        });
+
+    this.backgrounds.forEach(background => {
+            this.ctx.drawImage(background.img, background.x, background.y, background.width, background.height);
         });
 
 
