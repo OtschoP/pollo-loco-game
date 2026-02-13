@@ -13,6 +13,7 @@ class World {
 
     layerone = new Layerone();
     layertwo = new Layertwo();
+    layerthree = new Layerthree();
 
 
     ctx;
@@ -32,6 +33,7 @@ class World {
         this.ctx.drawImage(this.air.img, this.air.x, this.air.y, this.air.width, this.air.height);
         this.ctx.drawImage(this.layerone.img, this.layerone.x, this.layerone.y, this.layerone.width, this.layerone.height);
         this.ctx.drawImage(this.layertwo.img, this.layertwo.x, this.layertwo.y, this.layertwo.width, this.layertwo.height);
+        this.ctx.drawImage(this.layerthree.img, this.layerthree.x, this.layerthree.y, this.layerthree.width, this.layerthree.height);
 
 
         this.enemies.forEach(enemy => {
