@@ -9,9 +9,7 @@ class World {
         new Cloud()
     ]
 
-    backgrounds = [
-        new Background()
-    ]
+    air = new Air();
 
 
     ctx;
@@ -21,12 +19,16 @@ class World {
         this.canvas = canvas;
         this.draw();
     }
-    
+
     draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-        
+
         this.ctx.drawImage(this.character.img, this.character.x, this.character.y, this.character.width, this.character.height);
+
+        this.ctx.drawImage(this.air.img, this.air.x, this.air.y, this.air.width, this.air.height);
+
+
 
         this.enemies.forEach(enemy => {
             this.ctx.drawImage(enemy.img, enemy.x, enemy.y, enemy.width, enemy.height);
@@ -35,14 +37,10 @@ class World {
             this.ctx.drawImage(cloud.img, cloud.x, cloud.y, cloud.width, cloud.height);
         });
 
-    this.backgrounds.forEach(background => {
-            this.ctx.drawImage(background.img, background.x, background.y, background.width, background.height);
-        });
-
 
         // draw wird immer wieder aufgerufen
         let self = this;
-        requestAnimationFrame(function() {
+        requestAnimationFrame(function () {
             self.draw();
         });
     }
