@@ -27,9 +27,9 @@ class World {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
         this.addToMap(this.character);
-        addObjectsToMap(this.backgroundObjects); 
-        addObjectsToMap(this.enemies); 
-        addObjectsToMap(this.clouds); 
+        this.addObjectsToMap(this.backgroundObjects); 
+        this.addObjectsToMap(this.enemies); 
+        this.addObjectsToMap(this.clouds); 
 
         // draw wird immer wieder aufgerufen
         let self = this;
