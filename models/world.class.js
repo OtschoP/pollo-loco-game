@@ -7,13 +7,12 @@ class World {
     ];
     clouds = [
         new Cloud()
-    ]
+    ];
+    backgroundObjects = [
+        new BackgroundObject('img/5_background/layers/1_first_layer/1.png')
+    ];
 
-    air = new Air();
 
-    layerone = new Layerone();
-    layertwo = new Layertwo();
-    layerthree = new Layerthree();
 
 
     ctx;
@@ -27,21 +26,19 @@ class World {
     draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-        this.ctx.drawImage(this.air.img, this.air.x, this.air.y, this.air.width, this.air.height);
-        this.ctx.drawImage(this.layertwo.img, this.layertwo.x, this.layertwo.y, this.layertwo.width, this.layertwo.height);
-        this.ctx.drawImage(this.layerthree.img, this.layerthree.x, this.layerthree.y, this.layerthree.width, this.layerthree.height);
-        this.ctx.drawImage(this.layerone.img, this.layerone.x, this.layerone.y, this.layerone.width, this.layerone.height);
-        
-        this.ctx.drawImage(this.character.img, this.character.x, this.character.y, this.character.width, this.character.height);
+        this.addToMap(this.character);
 
 
         this.enemies.forEach(enemy => {
-            this.ctx.drawImage(enemy.img, enemy.x, enemy.y, enemy.width, enemy.height);
+            this.addToMap(enemy);
         });
         this.clouds.forEach(cloud => {
-            this.ctx.drawImage(cloud.img, cloud.x, cloud.y, cloud.width, cloud.height);
+            this.addToMap(cloud);
         });
 
+        this.backgroundObjects.forEach((bgo) => {
+            this.addToMap(bgo);
+        });
 
         // draw wird immer wieder aufgerufen
         let self = this;
@@ -49,4 +46,9 @@ class World {
             self.draw();
         });
     }
+
+    addToMap(mo) {
+        this.ctx.drawImage(mo.img, mo.x, mo.y, mo.width, mo.height);
+    }
+
 }
