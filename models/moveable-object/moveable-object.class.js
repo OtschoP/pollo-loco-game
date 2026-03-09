@@ -49,6 +49,10 @@ class MoveableObject {
             
         }, 1000 / 60);
     }
+    
+    jump(){
+        this.speedY = 20;
+    }
 
     playAnimation(images) {
         if (this.currentAnimation !== images) {
