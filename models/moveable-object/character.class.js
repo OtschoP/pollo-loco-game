@@ -45,7 +45,7 @@ class Character extends MoveableObject {
                 this.otherDirection = true;
             }
 
-            if (this.world.keyboard.UP) {
+            if (this.world.keyboard.UP && this.y > 180) {
                 this.speedY = 20;
             }          
             
