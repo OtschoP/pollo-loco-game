@@ -73,7 +73,12 @@ class World {
             drawX = drawX * -1;
         }
         this.ctx.drawImage(mo.img, drawX, mo.y, mo.width, mo.height);
-        if (mo.otherDirection) {
+        this.ctx.lineWidth = '5';
+        this.ctx.strokeStyle = 'blue';
+        this.ctx.beginPath();
+        this.ctx.rect(drawX, mo.y, mo.width, mo.height);
+        this.ctx.stroke();
+        if (mo.otherDirection) {    
             this.ctx.restore();
         }
     }
