@@ -21,11 +21,10 @@ class World {
     draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-        this.addParallaxObjectsToMap(this.level.backgroundObjects);
-        this.addParallaxObjectsToMap(this.level.clouds);
-
         this.ctx.translate(this.camera_x, 0);
 
+        this.addObjectsToMap(this.level.backgroundObjects);
+        this.addObjectsToMap(this.level.clouds);
         this.addToMap(this.character);
         this.addObjectsToMap(this.level.enemies);
         this.addObjectsToMap(this.level.coins);
@@ -46,39 +45,22 @@ class World {
         })
     }
 
-    addParallaxObjectsToMap(objects) {
-        const sortedObjects = objects
-            .map((o, index) => ({ o, index }))
-            .sort((a, b) => {
-                const parallaxA = a.o.parallax || 1;
-                const parallaxB = b.o.parallax || 1;
-                if (parallaxA !== parallaxB) {
-                    return parallaxA - parallaxB;
-                }
-                return a.index - b.index;
-            })
-            .map(entry => entry.o);
-
-        sortedObjects.forEach(o => {
-            let drawX = Math.round(o.x + this.camera_x * (o.parallax || 1));
-            this.addToMap(o, drawX);
-        });
-    }
-
-    addToMap(mo, drawX = mo.x) {
+    addToMap(mo) {
         if (mo.otherDirection) {
             this.ctx.save();
             this.ctx.translate(mo.width, 0);
             this.ctx.scale(-1, 1);
-            drawX = drawX * -1;
+            mo.x = mo.x * -1;
         }
-        this.ctx.drawImage(mo.img, drawX, mo.y, mo.width, mo.height);
+        mo.draw(this.ctx);
+        
         this.ctx.lineWidth = '5';
         this.ctx.strokeStyle = 'blue';
         this.ctx.beginPath();
-        this.ctx.rect(drawX, mo.y, mo.width, mo.height);
+        this.ctx.rect(mo.x, mo.y, mo.width, mo.height);
         this.ctx.stroke();
         if (mo.otherDirection) {    
+            mo.x = mo.x * -1;
             this.ctx.restore();
         }
     }

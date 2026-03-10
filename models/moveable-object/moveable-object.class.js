@@ -38,6 +38,10 @@ class MoveableObject {
         });
     }
 
+    draw(ctx) {
+        ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
+    }
+
     moveRight() {
         this.x += this.speed;
     }
