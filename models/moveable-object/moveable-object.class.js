@@ -43,11 +43,13 @@ class MoveableObject {
     }
 
     drawFrame(ctx) {
+        if (this instanceof Character || this instanceof Chicken || this instanceof Coin){
         ctx.lineWidth = '5';
         ctx.strokeStyle = 'blue';
         ctx.beginPath();
         ctx.rect(this.x, this.y, this.width, this.height);
         ctx.stroke();
+        }
     }
 
     moveRight() {
