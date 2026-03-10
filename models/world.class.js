@@ -47,22 +47,26 @@ class World {
 
     addToMap(mo) {
         if (mo.otherDirection) {
-            this.ctx.save();
-            this.ctx.translate(mo.width, 0);
-            this.ctx.scale(-1, 1);
-            mo.x = mo.x * -1;
+            this.flipImage(mo);
         }
         mo.draw(this.ctx);
-        
-        this.ctx.lineWidth = '5';
-        this.ctx.strokeStyle = 'blue';
-        this.ctx.beginPath();
-        this.ctx.rect(mo.x, mo.y, mo.width, mo.height);
-        this.ctx.stroke();
-        if (mo.otherDirection) {    
-            mo.x = mo.x * -1;
-            this.ctx.restore();
+        mo.drawFrame(this.ctx);
+
+        if (mo.otherDirection) {
+            this.flipImageBack(mo);
         }
+    }
+
+    flipImage(mo) {
+        this.ctx.save();
+        this.ctx.translate(mo.width, 0);
+        this.ctx.scale(-1, 1);
+        mo.x = mo.x * -1;
+    }
+
+    flipImageBack(mo) {
+        mo.x = mo.x * -1;
+        this.ctx.restore();
     }
 
 }
