@@ -4,6 +4,12 @@ class MoveableObject {
     img;
     height = 150;
     width = 100;
+    offset = {
+        top: 0,
+        right: 0,
+        bottom: 0,
+        left: 0
+    };
     imageCache = {};
     currentImage = 0;
     currentAnimation = 0;
@@ -43,21 +49,34 @@ class MoveableObject {
     }
 
     drawFrame(ctx) {
-        if (this instanceof Character || this instanceof Chicken || this instanceof Coin){
-        ctx.lineWidth = '5';
+        if (this instanceof Character || this instanceof Chicken || this instanceof Coin || this instanceof Endboss){
+        const hitbox = this.getHitbox();
+        ctx.lineWidth = '3';
         ctx.strokeStyle = 'blue';
         ctx.beginPath();
-        ctx.rect(this.x, this.y, this.width, this.height);
+        ctx.rect(hitbox.left, hitbox.top, hitbox.right - hitbox.left, hitbox.bottom - hitbox.top);
         ctx.stroke();
         }
     }
 
+    getHitbox() {
+        const objectOffset = this.offset || {};
+        return {
+            left: this.x + (objectOffset.left || 0),
+            top: this.y + (objectOffset.top || 0),
+            right: this.x + this.width - (objectOffset.right || 0),
+            bottom: this.y + this.height - (objectOffset.bottom || 0)
+        };
+    }
 
     isColliding(mo) {
-        return this.x + this.width > mo.x &&
-            this.y + this.height > mo.y &&
-            this.x < mo.x + mo.width &&
-            this.y < mo.y + mo.height;
+        const ownHitbox = this.getHitbox();
+        const otherHitbox = mo.getHitbox();
+
+        return ownHitbox.right > otherHitbox.left &&
+            ownHitbox.bottom > otherHitbox.top &&
+            ownHitbox.left < otherHitbox.right &&
+            ownHitbox.top < otherHitbox.bottom;
     }
     
     moveRight() {
