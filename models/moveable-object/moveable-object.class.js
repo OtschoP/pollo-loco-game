@@ -4,12 +4,6 @@ class MoveableObject {
     img;
     height = 150;
     width = 100;
-    offset = {
-        top: 0,
-        right: 0,
-        bottom: 0,
-        left: 0
-    };
     imageCache = {};
     currentImage = 0;
     currentAnimation = 0;
@@ -17,6 +11,13 @@ class MoveableObject {
     otherDirection = false;
     speedY = 0;
     acceleration = 2;
+    energy = 100;
+    offset = {
+        top: 0,
+        right: 0,
+        bottom: 0,
+        left: 0
+    };
 
     applyGravity() {
         setInterval(() => {
@@ -89,6 +90,10 @@ class MoveableObject {
 
     jump() {
         this.speedY = 30;
+    }
+
+    isDead(){
+        return this.energy <= 0;
     }
 
     playAnimation(images) {
