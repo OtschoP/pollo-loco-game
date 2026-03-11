@@ -88,7 +88,7 @@ class MoveableObject {
     }
 
     jump() {
-        this.speedY = 20;
+        this.speedY = 30;
     }
 
     playAnimation(images) {
