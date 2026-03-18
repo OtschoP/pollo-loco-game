@@ -4,7 +4,7 @@ class MoveableObject extends DrawableObject {
     otherDirection = false;
     speedY = 0;
     acceleration = 2;
-    energy = 100;
+    
     lastHit = 0;
     offset = {
         top: 0,
@@ -46,15 +46,7 @@ class MoveableObject extends DrawableObject {
             ownHitbox.top < otherHitbox.bottom;
     }
 
-    hit(){
-        this.energy -= 2;
-        if (this.energy < 0) {
-            this.energy = 0;
-        } else {
-            this.lastHit = new Date().getTime();
-        }
-    }
-
+    
     isHurt(){
         let timepassed = new Date().getTime() - this.lastHit;
         timepassed = timepassed / 1000;

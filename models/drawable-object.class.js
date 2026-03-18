@@ -6,6 +6,7 @@ class DrawableObject {
     y = 280;
     height = 150;
     width = 100;
+    energy = 100;
 
     loadImage(path) {
         this.img = new Image(); // this,img = document.getElementById('img') <img id="image" src>
@@ -26,6 +27,16 @@ class DrawableObject {
             ctx.stroke();
         }
     }
+
+    hit(){
+        this.energy -= 2;
+        if (this.energy < 0) {
+            this.energy = 0;
+        } else {
+            this.lastHit = new Date().getTime();
+        }
+    }
+
 
 
     loadImages(arr) {
