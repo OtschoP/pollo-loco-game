@@ -26,17 +26,6 @@ class MoveableObject extends DrawableObject {
         return this.y < 180;
     }
 
-    drawFrame(ctx) {
-        if (this instanceof Character || this instanceof Chicken || this instanceof Coin || this instanceof Endboss){
-        const hitbox = this.getHitbox();
-        ctx.lineWidth = '3';
-        ctx.strokeStyle = 'blue';
-        ctx.beginPath();
-        ctx.rect(hitbox.left, hitbox.top, hitbox.right - hitbox.left, hitbox.bottom - hitbox.top);
-        ctx.stroke();
-        }
-    }
-
     getHitbox() {
         const objectOffset = this.offset || {};
         return {
