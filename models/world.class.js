@@ -5,7 +5,9 @@ class World {
     ctx;
     keyboard;
     camera_x = 0;
-    statusBar = new StatusBar(this.character.energy);
+    statusBar = new StatusBar('health', 50, 0, this.character.energy);
+    coinStatusBar = new StatusBar('coin', 50, 50, 0);
+    bottleStatusBar = new StatusBar('bottle', 50, 100, 0);
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
@@ -48,6 +50,8 @@ class World {
         // fixed objects
         this.ctx.translate(-this.camera_x, 0);
         this.addToMap(this.statusBar);
+        this.addToMap(this.coinStatusBar);
+        this.addToMap(this.bottleStatusBar);
 
         // draw wird immer wieder aufgerufen
         let self = this;
