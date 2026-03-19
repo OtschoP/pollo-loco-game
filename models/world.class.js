@@ -45,7 +45,7 @@ class World {
         this.addObjectsToMap(this.level.enemies);
         this.addObjectsToMap(this.level.coins);
 
-
+        // fixed objects
         this.ctx.translate(-this.camera_x, 0);
         this.addToMap(this.statusBar);
 
