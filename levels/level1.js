@@ -1,7 +1,15 @@
+function createChickens() {
+    const basePositions = [320, 540, 760, 980, 1200, 1420, 1640, 1860];
+
+    return basePositions.map((baseX) => {
+        const xOffset = Math.random() * 80 - 40;
+        const speed = 0.2 + Math.random() * 0.3;
+        return new Chicken(baseX + xOffset, speed);
+    });
+}
+
 const level1 = new Level([
-        new Chicken(),
-        new Chicken(),
-        new Chicken(),
+        ...createChickens(),
         new Endboss()
     ],
     [
