@@ -9,6 +9,11 @@ class World {
     coinStatusBar = new StatusBar('coin', 50, 50, 0);
     bottleStatusBar = new StatusBar('bottle', 50, 100, 0);
     throwableObjects = [];
+    collectedCoins = 0;
+    maxCoins = this.level.coins.length;
+    collectedBottles = 0;
+    maxBottles = this.level.bottles.length;
+    throwKeyPressed = false;
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
@@ -33,10 +38,14 @@ class World {
     }
 
     checkThrowableObjects(){
-        if(this.keyboard.D){
+        if (this.keyboard.D && !this.throwKeyPressed && this.collectedBottles > 0) {
             let bottle = new ThrowableObject(this.character.x + 50, this.character.y + 100);
             this.throwableObjects.push(bottle);
+            this.collectedBottles--;
+            this.updateBottleStatusBar();
         }
+
+        this.throwKeyPressed = this.keyboard.D;
     }
 
     checkCollisions(){
@@ -47,8 +56,37 @@ class World {
                     console.log('Collision with Character, Energy:', this.character.energy);
                 }
             });
+
+        this.level.coins = this.level.coins.filter((coin) => {
+            if (this.character.isColliding(coin)) {
+                this.collectedCoins++;
+                this.updateCoinStatusBar();
+                return false;
+            }
+
+            return true;
+        });
+
+        this.level.bottles = this.level.bottles.filter((bottle) => {
+            if (this.character.isColliding(bottle)) {
+                this.collectedBottles++;
+                this.updateBottleStatusBar();
+                return false;
+            }
+
+            return true;
+        });
+    }
+
+    updateCoinStatusBar() {
+        const percentage = (this.collectedCoins / this.maxCoins) * 100;
+        this.coinStatusBar.setPercentage(percentage);
     }
     
+    updateBottleStatusBar() {
+        const percentage = (this.collectedBottles / this.maxBottles) * 100;
+        this.bottleStatusBar.setPercentage(percentage);
+    }
 
     draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -61,6 +99,7 @@ class World {
         this.addObjectsToMap(this.level.clouds);
         this.addObjectsToMap(this.level.enemies);
         this.addObjectsToMap(this.level.coins);
+        this.addObjectsToMap(this.level.bottles);
         this.addObjectsToMap(this.throwableObjects);
 
         // fixed objects
