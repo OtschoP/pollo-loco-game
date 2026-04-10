@@ -14,6 +14,8 @@ class World {
     collectedBottles = 0;
     maxBottles = this.level.bottles.length;
     throwKeyPressed = false;
+    enemyHitCooldownMs = 600;
+    lastEnemyHitAt = 0;
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
@@ -34,7 +36,7 @@ class World {
 
             this.checkCollisions();
             this.checkThrowableObjects();
-        }, 200);
+        }, 1000 / 60);
     }
 
     checkThrowableObjects(){
@@ -49,9 +51,11 @@ class World {
     }
 
     checkCollisions(){
+        const now = Date.now();
         this.level.enemies.forEach((enemy) => {
-                if (this.character.isColliding(enemy)) {
+                if (this.character.isColliding(enemy) && now - this.lastEnemyHitAt >= this.enemyHitCooldownMs) {
                     this.character.hit();
+                    this.lastEnemyHitAt = now;
                     this.statusBar.setPercentage(this.character.energy);
                     console.log('Collision with Character, Energy:', this.character.energy);
                 }
@@ -90,6 +94,7 @@ class World {
 
     draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.throwableObjects = this.throwableObjects.filter((obj) => !obj.isMarkedForRemoval);
 
         this.ctx.translate(this.camera_x, 0);
 
