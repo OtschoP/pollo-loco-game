@@ -17,15 +17,7 @@ class DrawableObject {
         ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
     }
 
-    drawFrame(ctx) {
-        if (this instanceof Character || this instanceof Chicken || this instanceof Coin || this instanceof Bottle || this instanceof Endboss) {
-            const hitbox = this.getHitbox();
-            ctx.lineWidth = '3';
-            ctx.strokeStyle = 'blue';
-            ctx.beginPath();
-            ctx.rect(hitbox.left, hitbox.top, hitbox.right - hitbox.left, hitbox.bottom - hitbox.top);
-            ctx.stroke();
-        }
+    drawFrame() {
     }
 
     hit(){
