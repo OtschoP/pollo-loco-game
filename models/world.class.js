@@ -15,7 +15,7 @@ class World {
     maxBottles = this.level.bottles.length;
     throwKeyPressed = false;
     enemyHitCooldownMs = 600;
-    lastEnemyHitAt = 0;
+    canTakeDamage = true;
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
@@ -51,15 +51,32 @@ class World {
     }
 
     checkCollisions(){
-        const now = Date.now();
         this.level.enemies.forEach((enemy) => {
-                if (this.character.isColliding(enemy) && now - this.lastEnemyHitAt >= this.enemyHitCooldownMs) {
-                    this.character.hit();
-                    this.lastEnemyHitAt = now;
-                    this.statusBar.setPercentage(this.character.energy);
-                    console.log('Collision with Character, Energy:', this.character.energy);
+            const enemyCanDamage = enemy.isDefeated !== true;
+            if (enemyCanDamage && this.character.isColliding(enemy) && this.canTakeDamage) {
+                this.character.hit();
+                this.statusBar.setPercentage(this.character.energy);
+                console.log('Collision with Character, Energy:', this.character.energy);
+                this.canTakeDamage = false;
+                setTimeout(() => {
+                    this.canTakeDamage = true;
+                }, this.enemyHitCooldownMs);
+            }
+        });
+
+        for (const bottle of this.throwableObjects) {
+            if (bottle.hasSplashed || bottle.isMarkedForRemoval) {
+                continue;
+            }
+
+            for (const enemy of this.level.enemies) {
+                if (enemy instanceof Chicken && !enemy.isDefeated && bottle.isColliding(enemy)) {
+                    enemy.die();
+                    bottle.startSplashAnimation();
+                    break;
                 }
-            });
+            }
+        }
 
         this.level.coins = this.level.coins.filter((coin) => {
             if (this.character.isColliding(coin)) {
