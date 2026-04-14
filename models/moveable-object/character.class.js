@@ -46,6 +46,9 @@ class Character extends MoveableObject {
         'img/2_character_pepe/4_hurt/H-43.png'
     ];
     world;
+    isRemovedFromWorld = false;
+    deathAnimationStarted = false;
+    deathAnimationFinished = false;
 
     constructor() {
         super().loadImage('img/2_character_pepe/2_walk/W-21.png');
@@ -60,8 +63,10 @@ class Character extends MoveableObject {
     animate() {
 
         setInterval(() => {
+            if (!this.world || this.isDead() || this.isRemovedFromWorld) {
+                return;
+            }
 
-            
             if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
                 this.moveRight();
                 this.otherDirection = false;
@@ -80,9 +85,12 @@ class Character extends MoveableObject {
 
 
         setInterval(() => {
+            if (!this.world || this.isRemovedFromWorld) {
+                return;
+            }
             
             if (this.isDead()) {
-                this.playAnimation(this.IMAGES_DEAD);
+                this.playDeathAnimationOnce();
             } else if (this.isHurt()) {
                 this.playAnimation(this.IMAGES_HURT);
             } else if (this.isAboveGround()) {
@@ -93,6 +101,27 @@ class Character extends MoveableObject {
                 this.img = this.imageCache[this.IMAGES_WALKING[0]];
             }
         }, 100);
+    }
+
+    playDeathAnimationOnce() {
+        if (this.deathAnimationFinished) {
+            return;
+        }
+
+        if (!this.deathAnimationStarted) {
+            this.deathAnimationStarted = true;
+            this.currentImage = 0;
+        }
+
+        const frameIndex = Math.min(this.currentImage, this.IMAGES_DEAD.length - 1);
+        const framePath = this.IMAGES_DEAD[frameIndex];
+        this.img = this.imageCache[framePath];
+        this.currentImage++;
+
+        if (this.currentImage >= this.IMAGES_DEAD.length) {
+            this.deathAnimationFinished = true;
+            this.world.removeCharacterFromWorld();
+        }
     }
 
 }

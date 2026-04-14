@@ -16,11 +16,14 @@ class World {
     throwKeyPressed = false;
     enemyHitCooldownMs = 600;
     canTakeDamage = true;
+    isGameOver = false;
+    gameOverImage = new Image();
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard = keyboard;
+        this.gameOverImage.src = 'img/9_intro_outro_screens/game_over/game over.png';
         this.draw();
         this.setWorld();
         this.run()
@@ -33,13 +36,17 @@ class World {
 
     run() {
         setInterval(() => {
-
             this.checkCollisions();
             this.checkThrowableObjects();
+            this.checkGameOver();
         }, 1000 / 60);
     }
 
     checkThrowableObjects(){
+        if (this.isGameOver || this.character.isRemovedFromWorld) {
+            return;
+        }
+
         if (this.keyboard.D && !this.throwKeyPressed && this.collectedBottles > 0) {
             let bottle = new ThrowableObject(this.character.x + 50, this.character.y + 100);
             this.throwableObjects.push(bottle);
@@ -51,9 +58,11 @@ class World {
     }
 
     checkCollisions(){
+        const characterCanInteract = !this.character.isRemovedFromWorld && !this.character.isDead();
+
         this.level.enemies.forEach((enemy) => {
             const enemyCanDamage = enemy.isDefeated !== true;
-            if (enemyCanDamage && this.character.isColliding(enemy) && this.canTakeDamage) {
+            if (characterCanInteract && enemyCanDamage && this.character.isColliding(enemy) && this.canTakeDamage) {
                 this.character.hit();
                 this.statusBar.setPercentage(this.character.energy);
                 console.log('Collision with Character, Energy:', this.character.energy);
@@ -78,24 +87,64 @@ class World {
             }
         }
 
-        this.level.coins = this.level.coins.filter((coin) => {
-            if (this.character.isColliding(coin)) {
-                this.collectedCoins++;
-                this.updateCoinStatusBar();
-                return false;
-            }
+        if (characterCanInteract) {
+            this.level.coins = this.level.coins.filter((coin) => {
+                if (this.character.isColliding(coin)) {
+                    this.collectedCoins++;
+                    this.updateCoinStatusBar();
+                    return false;
+                }
 
-            return true;
-        });
+                return true;
+            });
 
-        this.level.bottles = this.level.bottles.filter((bottle) => {
-            if (this.character.isColliding(bottle)) {
-                this.collectedBottles++;
-                this.updateBottleStatusBar();
-                return false;
-            }
+            this.level.bottles = this.level.bottles.filter((bottle) => {
+                if (this.character.isColliding(bottle)) {
+                    this.collectedBottles++;
+                    this.updateBottleStatusBar();
+                    return false;
+                }
 
-            return true;
+                return true;
+            });
+        }
+    }
+
+    checkGameOver() {
+        if (!this.isGameOver && this.character.isDead()) {
+            this.isGameOver = true;
+            this.resetPressedKeys();
+        }
+    }
+
+    resetPressedKeys() {
+        this.keyboard.LEFT = false;
+        this.keyboard.RIGHT = false;
+        this.keyboard.UP = false;
+        this.keyboard.DOWN = false;
+        this.keyboard.SPACE = false;
+        this.keyboard.D = false;
+    }
+
+    removeCharacterFromWorld() {
+        this.character.isRemovedFromWorld = true;
+    }
+
+    drawGameOverScreen() {
+        if (this.gameOverImage.complete) {
+            const maxWidth = this.canvas.width * 0.85;
+            const imageRatio = this.gameOverImage.width / this.gameOverImage.height;
+            const drawWidth = maxWidth;
+            const drawHeight = drawWidth / imageRatio;
+            const drawX = (this.canvas.width - drawWidth) / 2;
+            const drawY = (this.canvas.height - drawHeight) / 2;
+            this.ctx.drawImage(this.gameOverImage, drawX, drawY, drawWidth, drawHeight);
+        }
+    }
+
+    scheduleNextFrame() {
+        requestAnimationFrame(() => {
+            this.draw();
         });
     }
 
@@ -110,6 +159,8 @@ class World {
     }
 
     draw() {
+        this.checkGameOver();
+
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.throwableObjects = this.throwableObjects.filter((obj) => !obj.isMarkedForRemoval);
 
@@ -127,16 +178,18 @@ class World {
         this.addToMap(this.coinStatusBar);
         this.addToMap(this.bottleStatusBar);
 
-        this.ctx.save();
-        this.ctx.translate(this.camera_x, 0);
-        this.addToMap(this.character);
-        this.ctx.restore();
+        if (!this.character.isRemovedFromWorld) {
+            this.ctx.save();
+            this.ctx.translate(this.camera_x, 0);
+            this.addToMap(this.character);
+            this.ctx.restore();
+        }
 
-        // draw wird immer wieder aufgerufen
-        let self = this;
-        requestAnimationFrame(function () {
-            self.draw();
-        });
+        if (this.isGameOver && this.character.isRemovedFromWorld) {
+            this.drawGameOverScreen();
+        }
+
+        this.scheduleNextFrame();
     }
 
     addObjectsToMap(objects) {
