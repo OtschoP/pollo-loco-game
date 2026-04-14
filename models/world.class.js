@@ -117,18 +117,19 @@ class World {
 
         this.addObjectsToMap(this.level.backgroundObjects);
         
-        this.addToMap(this.character);
         this.addObjectsToMap(this.level.clouds);
-        this.addObjectsToMap(this.level.enemies);
         this.addObjectsToMap(this.level.coins);
         this.addObjectsToMap(this.level.bottles);
-        this.addObjectsToMap(this.throwableObjects);
-
-        // fixed objects
-        this.ctx.translate(-this.camera_x, 0);
         this.addToMap(this.statusBar);
         this.addToMap(this.coinStatusBar);
         this.addToMap(this.bottleStatusBar);
+        this.addObjectsToMap(this.level.enemies);
+        this.addObjectsToMap(this.throwableObjects);
+        this.addToMap(this.character);
+
+        // fixed objects
+        this.ctx.translate(-this.camera_x, 0);
+        
 
         // draw wird immer wieder aufgerufen
         let self = this;
