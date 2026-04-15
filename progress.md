@@ -9,3 +9,13 @@ Original prompt: kannst Du mir dabei helfen einen offset für die jeweiligen mov
 - Validation status:
 - `node --check` passed for all edited files.
 - Playwright validation currently blocked in this environment (missing browser deps initially, then local browser/server execution required elevated permissions that were not granted).
+
+2026-04-15
+- Implemented staged idle animation for `Character` in `models/moveable-object/character.class.js`.
+- Added `IMAGES_IDLE` (`I-1` ... `I-10`) and `IMAGES_LONG_IDLE` (`I-11` ... `I-20`) preload + playback logic.
+- Behavior now: while standing still on ground, play `IMAGES_IDLE` once, then loop `IMAGES_LONG_IDLE` until movement resumes.
+- On walk/jump/hurt/dead transitions, idle state resets so idle intro starts fresh on next standstill.
+- Validation status:
+- `node --check` passed for edited files (`character.class.js`, `world.class.js`).
+- Playwright/web-game client validation blocked due missing `playwright` package and restricted network (npm registry unreachable; escalated retry not approved).
+- Added a 2000ms inactivity delay before idle animation starts (`idleDelayMs`, `lastActiveAt`, `markActivity()` in `Character`).

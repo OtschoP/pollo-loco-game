@@ -30,6 +30,32 @@ class Character extends MoveableObject {
         'img/2_character_pepe/3_jump/J-39.png'
     ];
 
+    IMAGES_IDLE = [
+        'img/2_character_pepe/1_idle/idle/I-1.png',
+        'img/2_character_pepe/1_idle/idle/I-2.png',
+        'img/2_character_pepe/1_idle/idle/I-3.png',
+        'img/2_character_pepe/1_idle/idle/I-4.png',
+        'img/2_character_pepe/1_idle/idle/I-5.png',
+        'img/2_character_pepe/1_idle/idle/I-6.png',
+        'img/2_character_pepe/1_idle/idle/I-7.png',
+        'img/2_character_pepe/1_idle/idle/I-8.png',
+        'img/2_character_pepe/1_idle/idle/I-9.png',
+        'img/2_character_pepe/1_idle/idle/I-10.png'
+    ];
+
+    IMAGES_LONG_IDLE = [
+        'img/2_character_pepe/1_idle/long_idle/I-11.png',
+        'img/2_character_pepe/1_idle/long_idle/I-12.png',
+        'img/2_character_pepe/1_idle/long_idle/I-13.png',
+        'img/2_character_pepe/1_idle/long_idle/I-14.png',
+        'img/2_character_pepe/1_idle/long_idle/I-15.png',
+        'img/2_character_pepe/1_idle/long_idle/I-16.png',
+        'img/2_character_pepe/1_idle/long_idle/I-17.png',
+        'img/2_character_pepe/1_idle/long_idle/I-18.png',
+        'img/2_character_pepe/1_idle/long_idle/I-19.png',
+        'img/2_character_pepe/1_idle/long_idle/I-20.png'
+    ];
+
     IMAGES_DEAD = [
         'img/2_character_pepe/5_dead/D-51.png',
         'img/2_character_pepe/5_dead/D-52.png',
@@ -49,11 +75,17 @@ class Character extends MoveableObject {
     isRemovedFromWorld = false;
     deathAnimationStarted = false;
     deathAnimationFinished = false;
+    idleAnimationFinished = false;
+    idleImageIndex = 0;
+    idleDelayMs = 2000;
+    lastActiveAt = Date.now();
 
     constructor() {
         super().loadImage('img/2_character_pepe/2_walk/W-21.png');
         this.loadImages(this.IMAGES_WALKING);
         this.loadImages(this.IMAGES_JUMPING);
+        this.loadImages(this.IMAGES_IDLE);
+        this.loadImages(this.IMAGES_LONG_IDLE);
         this.loadImages(this.IMAGES_DEAD);
         this.loadImages(this.IMAGES_HURT);
         this.applyGravity();
@@ -88,19 +120,67 @@ class Character extends MoveableObject {
             if (!this.world || this.isRemovedFromWorld) {
                 return;
             }
+
+            const isWalking = this.world.keyboard.RIGHT || this.world.keyboard.LEFT;
             
             if (this.isDead()) {
+                this.markActivity();
                 this.playDeathAnimationOnce();
             } else if (this.isHurt()) {
+                this.markActivity();
                 this.playAnimation(this.IMAGES_HURT);
             } else if (this.isAboveGround()) {
+                this.markActivity();
                 this.playAnimation(this.IMAGES_JUMPING);
-            } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
+            } else if (isWalking) {
+                this.markActivity();
                 this.playAnimation(this.IMAGES_WALKING);
             } else {
-                this.img = this.imageCache[this.IMAGES_WALKING[0]];
+                const inactiveTime = Date.now() - this.lastActiveAt;
+                if (inactiveTime >= this.idleDelayMs) {
+                    this.playIdleAnimation();
+                } else {
+                    this.img = this.imageCache[this.IMAGES_WALKING[0]];
+                }
             }
         }, 100);
+    }
+
+    playIdleAnimation() {
+        if (!this.idleAnimationFinished) {
+            this.playIdleAnimationOnce();
+            return;
+        }
+
+        this.playAnimation(this.IMAGES_LONG_IDLE);
+    }
+
+    playIdleAnimationOnce() {
+        if (this.currentAnimation !== this.IMAGES_IDLE) {
+            this.currentAnimation = this.IMAGES_IDLE;
+            this.idleImageIndex = 0;
+        }
+
+        const frameIndex = Math.min(this.idleImageIndex, this.IMAGES_IDLE.length - 1);
+        const framePath = this.IMAGES_IDLE[frameIndex];
+        this.img = this.imageCache[framePath];
+
+        if (this.idleImageIndex < this.IMAGES_IDLE.length - 1) {
+            this.idleImageIndex++;
+            return;
+        }
+
+        this.idleAnimationFinished = true;
+    }
+
+    resetIdleAnimation() {
+        this.idleAnimationFinished = false;
+        this.idleImageIndex = 0;
+    }
+
+    markActivity() {
+        this.lastActiveAt = Date.now();
+        this.resetIdleAnimation();
     }
 
     playDeathAnimationOnce() {
