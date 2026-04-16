@@ -24,3 +24,7 @@ Original prompt: kannst Du mir dabei helfen einen offset für die jeweiligen mov
 - Added bottle throw rotation loop in `ThrowableObject` using `IMAGES_ROTATION` (`1_bottle_rotation` to `4_bottle_rotation`) while the bottle is in flight.
 - Rotation interval stops when splash starts; splash animation behavior remains unchanged.
 - Changed enemy render layering: Endboss is now drawn in a dedicated foreground pass after status bars, so UI no longer covers the boss.
+- Added new enemy class `ChickenSmall` with chicken-small walk/dead animations and movement behavior similar to `Chicken`.
+- Registered `chicken-small.class.js` in `index.html` so the class is available before `level1.js` runs.
+- Extended `level1` enemy setup with `createSmallChickens()` to spawn small chickens alongside normal chickens.
+- Updated bottle collision handling so throwable bottles defeat both `Chicken` and `ChickenSmall`.

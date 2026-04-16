@@ -79,7 +79,8 @@ class World {
             }
 
             for (const enemy of this.level.enemies) {
-                if (enemy instanceof Chicken && !enemy.isDefeated && bottle.isColliding(enemy)) {
+                const isChickenType = enemy instanceof Chicken || enemy instanceof ChickenSmall;
+                if (isChickenType && !enemy.isDefeated && bottle.isColliding(enemy)) {
                     enemy.die();
                     bottle.startSplashAnimation();
                     break;

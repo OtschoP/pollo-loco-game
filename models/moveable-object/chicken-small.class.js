@@ -1,0 +1,52 @@
+class ChickenSmall extends MoveableObject {
+    y = 370;
+    height = 60;
+    width = 60;
+    isDefeated = false;
+    offset = {
+        top: 6,
+        right: 8,
+        bottom: 4,
+        left: 8
+    };
+    IMAGES_WALKING = [
+        'img/3_enemies_chicken/chicken_small/1_walk/1_w.png',
+        'img/3_enemies_chicken/chicken_small/1_walk/2_w.png',
+        'img/3_enemies_chicken/chicken_small/1_walk/3_w.png'
+    ];
+    DEAD_IMAGE = 'img/3_enemies_chicken/chicken_small/2_dead/dead.png';
+
+    constructor(x = null, speed = null) {
+        super().loadImage(this.IMAGES_WALKING[0]);
+        this.loadImages(this.IMAGES_WALKING);
+        this.loadImages([this.DEAD_IMAGE]);
+
+        this.x = x !== null ? x : 200 + Math.random() * 500;
+        this.speed = speed !== null ? speed : 0.25 + Math.random() * 0.35;
+        this.animate();
+    }
+
+    die() {
+        if (this.isDefeated) {
+            return;
+        }
+
+        this.isDefeated = true;
+        this.speed = 0;
+        this.img = this.imageCache[this.DEAD_IMAGE];
+    }
+
+    animate() {
+        setInterval(() => {
+            if (!this.isDefeated) {
+                this.moveLeft();
+            }
+        }, 1000 / 60);
+
+        setInterval(() => {
+            if (!this.isDefeated) {
+                this.playAnimation(this.IMAGES_WALKING);
+            }
+        }, 200);
+    }
+}

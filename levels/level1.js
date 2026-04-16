@@ -8,8 +8,19 @@ function createChickens() {
     });
 }
 
+function createSmallChickens() {
+    const basePositions = [450, 890, 1330, 1770];
+
+    return basePositions.map((baseX) => {
+        const xOffset = Math.random() * 60 - 30;
+        const speed = 0.25 + Math.random() * 0.35;
+        return new ChickenSmall(baseX + xOffset, speed);
+    });
+}
+
 const level1 = new Level([
         ...createChickens(),
+        ...createSmallChickens(),
         new Endboss()
     ],
     [
