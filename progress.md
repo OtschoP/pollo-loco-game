@@ -21,3 +21,5 @@ Original prompt: kannst Du mir dabei helfen einen offset für die jeweiligen mov
 - Added a 2000ms inactivity delay before idle animation starts (`idleDelayMs`, `lastActiveAt`, `markActivity()` in `Character`).
 - Updated game-over rendering in `World`: game over image now fills the full canvas (`drawImage(..., 0, 0, canvas.width, canvas.height)`).
 - Refactored `World.draw()` to meet max-line guideline by extracting rendering steps into `prepareFrame`, `drawScrollableWorld`, `drawFixedUi`, `drawCharacterIfVisible`, and `drawGameOverIfReady`.
+- Added bottle throw rotation loop in `ThrowableObject` using `IMAGES_ROTATION` (`1_bottle_rotation` to `4_bottle_rotation`) while the bottle is in flight.
+- Rotation interval stops when splash starts; splash animation behavior remains unchanged.
