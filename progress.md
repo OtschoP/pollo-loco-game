@@ -19,3 +19,4 @@ Original prompt: kannst Du mir dabei helfen einen offset für die jeweiligen mov
 - `node --check` passed for edited files (`character.class.js`, `world.class.js`).
 - Playwright/web-game client validation blocked due missing `playwright` package and restricted network (npm registry unreachable; escalated retry not approved).
 - Added a 2000ms inactivity delay before idle animation starts (`idleDelayMs`, `lastActiveAt`, `markActivity()` in `Character`).
+- Updated game-over rendering in `World`: game over image now fills the full canvas (`drawImage(..., 0, 0, canvas.width, canvas.height)`).

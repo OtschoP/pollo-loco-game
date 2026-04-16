@@ -132,13 +132,7 @@ class World {
 
     drawGameOverScreen() {
         if (this.gameOverImage.complete) {
-            const maxWidth = this.canvas.width * 0.85;
-            const imageRatio = this.gameOverImage.width / this.gameOverImage.height;
-            const drawWidth = maxWidth;
-            const drawHeight = drawWidth / imageRatio;
-            const drawX = (this.canvas.width - drawWidth) / 2;
-            const drawY = (this.canvas.height - drawHeight) / 2;
-            this.ctx.drawImage(this.gameOverImage, drawX, drawY, drawWidth, drawHeight);
+            this.ctx.drawImage(this.gameOverImage, 0, 0, this.canvas.width, this.canvas.height);
         }
     }
 
