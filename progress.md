@@ -23,3 +23,4 @@ Original prompt: kannst Du mir dabei helfen einen offset für die jeweiligen mov
 - Refactored `World.draw()` to meet max-line guideline by extracting rendering steps into `prepareFrame`, `drawScrollableWorld`, `drawFixedUi`, `drawCharacterIfVisible`, and `drawGameOverIfReady`.
 - Added bottle throw rotation loop in `ThrowableObject` using `IMAGES_ROTATION` (`1_bottle_rotation` to `4_bottle_rotation`) while the bottle is in flight.
 - Rotation interval stops when splash starts; splash animation behavior remains unchanged.
+- Changed enemy render layering: Endboss is now drawn in a dedicated foreground pass after status bars, so UI no longer covers the boss.

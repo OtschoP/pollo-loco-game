@@ -156,6 +156,7 @@ class World {
         this.prepareFrame();
         this.drawScrollableWorld();
         this.drawFixedUi();
+        this.drawEndbossInForeground();
         this.drawCharacterIfVisible();
         this.drawGameOverIfReady();
         this.scheduleNextFrame();
@@ -174,7 +175,7 @@ class World {
         this.addObjectsToMap(this.level.clouds);
         this.addObjectsToMap(this.level.coins);
         this.addObjectsToMap(this.level.bottles);
-        this.addObjectsToMap(this.level.enemies);
+        this.addObjectsToMap(this.getRegularEnemies());
         this.addObjectsToMap(this.throwableObjects);
         this.ctx.restore();
     }
@@ -183,6 +184,18 @@ class World {
         this.addToMap(this.statusBar);
         this.addToMap(this.coinStatusBar);
         this.addToMap(this.bottleStatusBar);
+    }
+
+    drawEndbossInForeground() {
+        const endbosses = this.getEndbosses();
+        if (endbosses.length === 0) {
+            return;
+        }
+
+        this.ctx.save();
+        this.ctx.translate(this.camera_x, 0);
+        this.addObjectsToMap(endbosses);
+        this.ctx.restore();
     }
 
     drawCharacterIfVisible() {
@@ -198,6 +211,14 @@ class World {
         if (this.isGameOver && this.character.isRemovedFromWorld) {
             this.drawGameOverScreen();
         }
+    }
+
+    getRegularEnemies() {
+        return this.level.enemies.filter((enemy) => !(enemy instanceof Endboss));
+    }
+
+    getEndbosses() {
+        return this.level.enemies.filter((enemy) => enemy instanceof Endboss);
     }
 
     addObjectsToMap(objects) {
