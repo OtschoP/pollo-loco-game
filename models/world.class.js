@@ -153,11 +153,21 @@ class World {
     }
 
     draw() {
-        this.checkGameOver();
+        this.prepareFrame();
+        this.drawScrollableWorld();
+        this.drawFixedUi();
+        this.drawCharacterIfVisible();
+        this.drawGameOverIfReady();
+        this.scheduleNextFrame();
+    }
 
+    prepareFrame() {
+        this.checkGameOver();
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.throwableObjects = this.throwableObjects.filter((obj) => !obj.isMarkedForRemoval);
+    }
 
+    drawScrollableWorld() {
         this.ctx.save();
         this.ctx.translate(this.camera_x, 0);
         this.addObjectsToMap(this.level.backgroundObjects);
@@ -167,23 +177,27 @@ class World {
         this.addObjectsToMap(this.level.enemies);
         this.addObjectsToMap(this.throwableObjects);
         this.ctx.restore();
+    }
 
+    drawFixedUi() {
         this.addToMap(this.statusBar);
         this.addToMap(this.coinStatusBar);
         this.addToMap(this.bottleStatusBar);
+    }
 
+    drawCharacterIfVisible() {
         if (!this.character.isRemovedFromWorld) {
             this.ctx.save();
             this.ctx.translate(this.camera_x, 0);
             this.addToMap(this.character);
             this.ctx.restore();
         }
+    }
 
+    drawGameOverIfReady() {
         if (this.isGameOver && this.character.isRemovedFromWorld) {
             this.drawGameOverScreen();
         }
-
-        this.scheduleNextFrame();
     }
 
     addObjectsToMap(objects) {
