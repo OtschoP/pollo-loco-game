@@ -32,6 +32,9 @@ class World {
 
     setWorld() {
         this.character.world = this;
+        this.getEndbosses().forEach((endboss) => {
+            endboss.world = this;
+        });
     }
 
     run() {

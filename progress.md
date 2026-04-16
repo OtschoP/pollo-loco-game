@@ -28,3 +28,7 @@ Original prompt: kannst Du mir dabei helfen einen offset für die jeweiligen mov
 - Registered `chicken-small.class.js` in `index.html` so the class is available before `level1.js` runs.
 - Extended `level1` enemy setup with `createSmallChickens()` to spawn small chickens alongside normal chickens.
 - Updated bottle collision handling so throwable bottles defeat both `Chicken` and `ChickenSmall`.
+- Implemented Endboss MVP behavior: proximity activation (450px), once-activated permanent chase, and chase speed set to 2.2.
+- Endboss now uses `1_walk` animation before activation and `2_alert` while activated/chasing.
+- Wired world reference for all endboss instances in `World.setWorld()` to enable player-distance checks and chase logic.
+- Boss movement/activation now pauses when `isGameOver` is true.
