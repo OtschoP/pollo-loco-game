@@ -64,7 +64,7 @@ class World {
         const characterCanInteract = !this.character.isRemovedFromWorld && !this.character.isDead();
 
         this.level.enemies.forEach((enemy) => {
-            const enemyCanDamage = enemy.isDefeated !== true;
+            const enemyCanDamage = enemy.isDefeated !== true && !enemy.isDead();
             if (characterCanInteract && enemyCanDamage && this.character.isColliding(enemy) && this.canTakeDamage) {
                 this.character.hit();
                 this.statusBar.setPercentage(this.character.energy);
@@ -83,8 +83,16 @@ class World {
 
             for (const enemy of this.level.enemies) {
                 const isChickenType = enemy instanceof Chicken || enemy instanceof ChickenSmall;
+                const isEndboss = enemy instanceof Endboss;
+
                 if (isChickenType && !enemy.isDefeated && bottle.isColliding(enemy)) {
                     enemy.die();
+                    bottle.startSplashAnimation();
+                    break;
+                }
+
+                if (isEndboss && !enemy.isDead() && bottle.isColliding(enemy)) {
+                    enemy.takeBottleHit();
                     bottle.startSplashAnimation();
                     break;
                 }

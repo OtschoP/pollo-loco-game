@@ -32,3 +32,4 @@ Original prompt: kannst Du mir dabei helfen einen offset für die jeweiligen mov
 - Endboss now uses `1_walk` animation before activation and `2_alert` while activated/chasing.
 - Wired world reference for all endboss instances in `World.setWorld()` to enable player-distance checks and chase logic.
 - Boss movement/activation now pauses when `isGameOver` is true.
+- Adjusted Endboss chase: direction is now re-evaluated only every 6000ms (`chaseDirectionChangeIntervalMs`), causing delayed turn response.
