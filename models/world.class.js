@@ -8,6 +8,7 @@ class World {
     statusBar = new StatusBar('health', 50, 0, this.character.energy);
     coinStatusBar = new StatusBar('coin', 50, 50, 0);
     bottleStatusBar = new StatusBar('bottle', 50, 100, 0);
+    endbossStatusBar;
     throwableObjects = [];
     collectedCoins = 0;
     maxCoins = this.level.coins.length;
@@ -23,9 +24,11 @@ class World {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard = keyboard;
+        this.endbossStatusBar = new StatusBar('endboss', this.canvas.width - 250, 0, 100);
         this.gameOverImage.src = 'img/9_intro_outro_screens/game_over/game over.png';
         this.draw();
         this.setWorld();
+        this.updateEndbossStatusBar();
         this.run()
 
     }
@@ -93,6 +96,7 @@ class World {
 
                 if (isEndboss && !enemy.isDead() && bottle.isColliding(enemy)) {
                     enemy.takeBottleHit();
+                    this.updateEndbossStatusBar(enemy);
                     bottle.startSplashAnimation();
                     break;
                 }
@@ -164,6 +168,12 @@ class World {
         this.bottleStatusBar.setPercentage(percentage);
     }
 
+    updateEndbossStatusBar(endboss = null) {
+        const currentEndboss = endboss || this.getEndbosses()[0];
+        const percentage = currentEndboss ? currentEndboss.energy : 0;
+        this.endbossStatusBar.setPercentage(percentage);
+    }
+
     draw() {
         this.prepareFrame();
         this.drawScrollableWorld();
@@ -196,6 +206,9 @@ class World {
         this.addToMap(this.statusBar);
         this.addToMap(this.coinStatusBar);
         this.addToMap(this.bottleStatusBar);
+        if (this.getEndbosses().length > 0) {
+            this.addToMap(this.endbossStatusBar);
+        }
     }
 
     drawEndbossInForeground() {
