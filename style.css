@@ -2,7 +2,11 @@ body{
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: rgb(94, 29, 29);
+    background-color: #CB6F2F;
+    background-image: url(/img/background/background.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 canvas{
