@@ -6,6 +6,8 @@ class Endboss extends MoveableObject {
     speed = 2.2;
     activationDistance = 450;
     isActivated = false;
+    isAttacking = false;
+    attackCooldownUntil = 0;
     world;
     offset = {
         top: 70,
@@ -87,6 +89,11 @@ class Endboss extends MoveableObject {
                 return;
             }
 
+            if (this.isAttacking) {
+                this.playAttackAnimationOnce();
+                return;
+            }
+
             if (this.isActivated) {
                 this.playAnimation(this.IMAGES_ALERT);
                 return;
@@ -105,6 +112,33 @@ class Endboss extends MoveableObject {
         this.isActivated = true;
     }
 
+    startAttack() {
+        if (this.isDead() || this.isMovementLocked()) {
+            return;
+        }
+
+        this.isActivated = true;
+        this.isAttacking = true;
+        this.currentAnimation = this.IMAGES_ATTACK;
+        this.currentImage = 0;
+    }
+
+    playAttackAnimationOnce() {
+        const frameIndex = Math.min(this.currentImage, this.IMAGES_ATTACK.length - 1);
+        const framePath = this.IMAGES_ATTACK[frameIndex];
+        this.img = this.imageCache[framePath];
+        this.currentImage++;
+
+        if (this.currentImage >= this.IMAGES_ATTACK.length) {
+            this.isAttacking = false;
+            this.attackCooldownUntil = Date.now() + 1000;
+        }
+    }
+
+    isMovementLocked() {
+        return this.isAttacking || Date.now() < this.attackCooldownUntil;
+    }
+
     updateActivation() {
         if (this.isActivated || !this.world || this.world.isGameOver) {
             return;
@@ -117,7 +151,7 @@ class Endboss extends MoveableObject {
     }
 
     updateChaseMovement() {
-        if (!this.isActivated || !this.world || this.world.isGameOver || this.isDead()) {
+        if (!this.isActivated || !this.world || this.world.isGameOver || this.isDead() || this.isMovementLocked()) {
             return;
         }
 

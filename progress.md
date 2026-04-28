@@ -33,3 +33,7 @@ Original prompt: kannst Du mir dabei helfen einen offset für die jeweiligen mov
 - Wired world reference for all endboss instances in `World.setWorld()` to enable player-distance checks and chase logic.
 - Boss movement/activation now pauses when `isGameOver` is true.
 - Adjusted Endboss chase: direction is now re-evaluated only every 6000ms (`chaseDirectionChangeIntervalMs`), causing delayed turn response.
+
+2026-04-28
+- Added Endboss collision attack behavior: `World.checkCollisions()` now calls `Endboss.startAttack()` when character and Endboss collide.
+- Endboss now plays `IMAGES_ATTACK` once, stands still during the attack, and remains movement-locked for 1000ms after the attack animation finishes.

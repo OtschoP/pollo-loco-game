@@ -68,7 +68,13 @@ class World {
 
         this.level.enemies.forEach((enemy) => {
             const enemyCanDamage = enemy.isDefeated !== true && !enemy.isDead();
-            if (characterCanInteract && enemyCanDamage && this.character.isColliding(enemy) && this.canTakeDamage) {
+            const isCharacterCollision = characterCanInteract && enemyCanDamage && this.character.isColliding(enemy);
+
+            if (isCharacterCollision && enemy instanceof Endboss) {
+                enemy.startAttack();
+            }
+
+            if (isCharacterCollision && this.canTakeDamage) {
                 this.character.hit();
                 this.statusBar.setPercentage(this.character.energy);
                 console.log('Collision with Character, Energy:', this.character.energy);
