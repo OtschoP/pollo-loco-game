@@ -70,8 +70,18 @@ class World {
             const enemyCanDamage = enemy.isDefeated !== true && !enemy.isDead();
             const isCharacterCollision = characterCanInteract && enemyCanDamage && this.character.isColliding(enemy);
 
+            if (!isCharacterCollision) {
+                return;
+            }
+
             if (isCharacterCollision && enemy instanceof Endboss) {
                 enemy.startAttack();
+            }
+
+            if (this.isStompCollision(enemy)) {
+                enemy.die();
+                this.bounceAfterStomp();
+                return;
             }
 
             if (isCharacterCollision && this.canTakeDamage) {
@@ -130,6 +140,23 @@ class World {
                 return true;
             });
         }
+    }
+
+    isStompCollision(enemy) {
+        const isChickenType = enemy instanceof Chicken || enemy instanceof ChickenSmall;
+        if (!isChickenType || this.character.speedY >= 0) {
+            return false;
+        }
+
+        const characterHitbox = this.character.getHitbox();
+        const enemyHitbox = enemy.getHitbox();
+        const stompTolerance = 15;
+
+        return characterHitbox.bottom <= enemyHitbox.top + stompTolerance;
+    }
+
+    bounceAfterStomp() {
+        this.character.speedY = 18;
     }
 
     checkGameOver() {
