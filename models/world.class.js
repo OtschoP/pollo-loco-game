@@ -19,6 +19,7 @@ class World {
     canTakeDamage = true;
     isGameOver = false;
     gameOverImage = new Image();
+    previousCharacterBottom = null;
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
@@ -65,6 +66,8 @@ class World {
 
     checkCollisions(){
         const characterCanInteract = !this.character.isRemovedFromWorld && !this.character.isDead();
+        const characterHitbox = this.character.getHitbox();
+        const previousCharacterBottom = this.previousCharacterBottom ?? characterHitbox.bottom;
 
         this.level.enemies.forEach((enemy) => {
             const enemyCanDamage = enemy.isDefeated !== true && !enemy.isDead();
@@ -78,7 +81,7 @@ class World {
                 enemy.startAttack();
             }
 
-            if (this.isStompCollision(enemy)) {
+            if (this.isStompCollision(enemy, characterHitbox, previousCharacterBottom)) {
                 enemy.die();
                 this.bounceAfterStomp();
                 return;
@@ -94,6 +97,8 @@ class World {
                 }, this.enemyHitCooldownMs);
             }
         });
+
+        this.previousCharacterBottom = characterHitbox.bottom;
 
         for (const bottle of this.throwableObjects) {
             if (bottle.hasSplashed || bottle.isMarkedForRemoval) {
@@ -142,17 +147,18 @@ class World {
         }
     }
 
-    isStompCollision(enemy) {
+    isStompCollision(enemy, characterHitbox, previousCharacterBottom) {
         const isChickenType = enemy instanceof Chicken || enemy instanceof ChickenSmall;
         if (!isChickenType || this.character.speedY >= 0) {
             return false;
         }
 
-        const characterHitbox = this.character.getHitbox();
         const enemyHitbox = enemy.getHitbox();
-        const stompTolerance = 15;
+        const stompTolerance = 20;
+        const crossedEnemyTop = previousCharacterBottom <= enemyHitbox.top + 5 && characterHitbox.bottom >= enemyHitbox.top;
+        const inTopToleranceZone = characterHitbox.bottom <= enemyHitbox.top + stompTolerance;
 
-        return characterHitbox.bottom <= enemyHitbox.top + stompTolerance;
+        return crossedEnemyTop || inTopToleranceZone;
     }
 
     bounceAfterStomp() {
