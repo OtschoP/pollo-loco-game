@@ -18,7 +18,9 @@ class World {
     enemyHitCooldownMs = 600;
     canTakeDamage = true;
     isGameOver = false;
+    isGameWon = false;
     gameOverImage = new Image();
+    winImage = new Image();
     previousCharacterBottom = null;
 
     constructor(canvas, keyboard) {
@@ -27,6 +29,7 @@ class World {
         this.keyboard = keyboard;
         this.endbossStatusBar = new StatusBar('endboss', this.canvas.width - 250, 0, 100);
         this.gameOverImage.src = 'img/9_intro_outro_screens/game_over/game over.png';
+        this.winImage.src = 'img/You won, you lost/You Win A.png';
         this.draw();
         this.setWorld();
         this.updateEndbossStatusBar();
@@ -43,14 +46,19 @@ class World {
 
     run() {
         setInterval(() => {
+            if (this.isGameOver || this.isGameWon) {
+                return;
+            }
+
             this.checkCollisions();
             this.checkThrowableObjects();
+            this.checkGameWon();
             this.checkGameOver();
         }, 1000 / 60);
     }
 
     checkThrowableObjects(){
-        if (this.isGameOver || this.character.isRemovedFromWorld) {
+        if (this.isGameOver || this.isGameWon || this.character.isRemovedFromWorld) {
             return;
         }
 
@@ -172,6 +180,18 @@ class World {
         }
     }
 
+    checkGameWon() {
+        if (this.isGameWon) {
+            return;
+        }
+
+        const endbosses = this.getEndbosses();
+        if (endbosses.length > 0 && endbosses.every((endboss) => endboss.isDead())) {
+            this.isGameWon = true;
+            this.resetPressedKeys();
+        }
+    }
+
     resetPressedKeys() {
         this.keyboard.LEFT = false;
         this.keyboard.RIGHT = false;
@@ -188,6 +208,12 @@ class World {
     drawGameOverScreen() {
         if (this.gameOverImage.complete) {
             this.ctx.drawImage(this.gameOverImage, 0, 0, this.canvas.width, this.canvas.height);
+        }
+    }
+
+    drawWinScreen() {
+        if (this.winImage.complete) {
+            this.ctx.drawImage(this.winImage, 0, 0, this.canvas.width, this.canvas.height);
         }
     }
 
@@ -220,6 +246,7 @@ class World {
         this.drawEndbossInForeground();
         this.drawCharacterIfVisible();
         this.drawGameOverIfReady();
+        this.drawWinIfReady();
         this.scheduleNextFrame();
     }
 
@@ -274,6 +301,12 @@ class World {
     drawGameOverIfReady() {
         if (this.isGameOver && this.character.isRemovedFromWorld) {
             this.drawGameOverScreen();
+        }
+    }
+
+    drawWinIfReady() {
+        if (this.isGameWon) {
+            this.drawWinScreen();
         }
     }
 

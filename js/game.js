@@ -10,7 +10,15 @@ function init() {
     console.log('My Character is', world.character);
 }
 
+function restartGame() {
+    window.location.reload();
+}
+
 window.addEventListener("keydown", (e) => {
+    if (world && (world.isGameOver || world.isGameWon)) {
+        return;
+    }
+
     if(e.keyCode == 39) {
         keyboard.RIGHT = true;
     }
@@ -32,6 +40,10 @@ window.addEventListener("keydown", (e) => {
 });
 
 window.addEventListener("keyup", (e) => {
+    if (world && (world.isGameOver || world.isGameWon)) {
+        return;
+    }
+
     if(e.keyCode == 39) {
         keyboard.RIGHT = false;
     }

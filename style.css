@@ -28,6 +28,24 @@ canvas{
     display: block;
 }
 
+.start-button {
+    margin-top: 16px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+}
+
+.start-button img {
+    width: 160px;
+    height: auto;
+    display: block;
+}
+
+.start-button:hover img {
+    transform: scale(1.03);
+}
+
 @media only screen and (max-width: 720px) {
     canvas{
         width: 100%;
