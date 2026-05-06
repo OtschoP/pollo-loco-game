@@ -77,8 +77,6 @@ class Character extends MoveableObject {
     deathAnimationFinished = false;
     idleAnimationFinished = false;
     idleImageIndex = 0;
-    idleDelayMs = 2000;
-    lastActiveAt = Date.now();
 
     constructor() {
         super().loadImage('img/2_character_pepe/2_walk/W-21.png');
@@ -136,12 +134,7 @@ class Character extends MoveableObject {
                 this.markActivity();
                 this.playAnimation(this.IMAGES_WALKING);
             } else {
-                const inactiveTime = Date.now() - this.lastActiveAt;
-                if (inactiveTime >= this.idleDelayMs) {
-                    this.playIdleAnimation();
-                } else {
-                    this.img = this.imageCache[this.IMAGES_WALKING[0]];
-                }
+                this.playIdleAnimation();
             }
         }, 100);
     }
@@ -179,7 +172,6 @@ class Character extends MoveableObject {
     }
 
     markActivity() {
-        this.lastActiveAt = Date.now();
         this.resetIdleAnimation();
     }
 
