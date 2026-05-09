@@ -1,20 +1,47 @@
 let canvas;
 let world;
 let keyboard = new Keyboard();
+let hasGameStarted = false;
+let startScreenImage = new Image();
 
 
 function init() {
     canvas = document.getElementById('canvas');
-    world = new World(canvas, keyboard);
+    startScreenImage.src = 'img/9_intro_outro_screens/start/startscreen_1.png';
 
+    if (startScreenImage.complete) {
+        drawStartScreen();
+    } else {
+        startScreenImage.onload = drawStartScreen;
+    }
+}
+
+function drawStartScreen() {
+    if (!canvas || hasGameStarted) {
+        return;
+    }
+
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(startScreenImage, 0, 0, canvas.width, canvas.height);
+}
+
+function startGame() {
+    if (hasGameStarted) {
+        window.location.reload();
+        return;
+    }
+
+    hasGameStarted = true;
+    world = new World(canvas, keyboard);
     console.log('My Character is', world.character);
 }
 
-function restartGame() {
-    window.location.reload();
-}
-
 window.addEventListener("keydown", (e) => {
+    if (!world) {
+        return;
+    }
+
     if (world && (world.isGameOver || world.isGameWon)) {
         return;
     }
@@ -40,6 +67,10 @@ window.addEventListener("keydown", (e) => {
 });
 
 window.addEventListener("keyup", (e) => {
+    if (!world) {
+        return;
+    }
+
     if (world && (world.isGameOver || world.isGameWon)) {
         return;
     }
