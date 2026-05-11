@@ -27,6 +27,8 @@ function drawStartScreen() {
 }
 
 function startGame() {
+    document.getElementById('start-button').blur();
+
     if (hasGameStarted) {
         window.location.reload();
         return;

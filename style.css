@@ -36,6 +36,10 @@ canvas{
     cursor: pointer;
 }
 
+.start-button:focus {
+    outline: none;
+}
+
 .start-button img {
     width: 160px;
     height: auto;
