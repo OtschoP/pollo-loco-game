@@ -63,7 +63,8 @@ class World {
         }
 
         if (this.keyboard.D && !this.throwKeyPressed && this.collectedBottles > 0) {
-            let bottle = new ThrowableObject(this.character.x + 50, this.character.y + 100);
+            let xOffset = this.character.otherDirection ? 0 : 50;
+            let bottle = new ThrowableObject(this.character.x + xOffset, this.character.y + 100, this.character.otherDirection);
             this.throwableObjects.push(bottle);
             this.collectedBottles--;
             this.updateBottleStatusBar();
