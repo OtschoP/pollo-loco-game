@@ -99,7 +99,6 @@ class World {
             if (isCharacterCollision && this.canTakeDamage) {
                 this.character.hit();
                 this.statusBar.setPercentage(this.character.energy);
-                console.log('Collision with Character, Energy:', this.character.energy);
                 this.canTakeDamage = false;
                 setTimeout(() => {
                     this.canTakeDamage = true;
