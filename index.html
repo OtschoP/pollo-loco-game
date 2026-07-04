@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link rel="icon" type="image/png" href="img/8_coin/coin_1.png">
     <link rel="stylesheet" href="./style.css">
     <script src="./models/drawable-object.class.js"></script>
@@ -27,30 +27,68 @@
 
 <body onload="init()">
 
-    <h1>El Polo Loco</h1>
+    <header class="top-bar">
+        <h1>El Polo Loco</h1>
+        <nav class="top-actions" aria-label="Menü">
+            <button id="help-button" class="icon-button" type="button" aria-label="Spielanleitung">?</button>
+            <button id="fullscreen-button" class="icon-button" type="button" aria-label="Vollbild">⛶</button>
+            <button id="impressum-button" class="icon-button" type="button" aria-label="Impressum">i</button>
+        </nav>
+    </header>
 
-    <canvas id="canvas" width="720" height="480"></canvas>
+    <main class="game-stage">
+        <canvas id="canvas" width="720" height="480"></canvas>
 
-    <section class="controls-hint" aria-label="Spielsteuerung">
-        <div class="control-item">
-            <span class="key">←</span>
-            <span class="key">→</span>
-            <span>Laufen</span>
-        </div>
-        <div class="control-item">
-            <span class="key">↑</span>
-            <span class="key key-wide">Leertaste</span>
-            <span>Springen</span>
-        </div>
-        <div class="control-item">
-            <span class="key">D</span>
-            <span>Flasche werfen</span>
-        </div>
-    </section>
+        <button id="start-button" class="start-button" type="button" onclick="startGame()" aria-label="Spiel starten">
+            <img src="img/9_intro_outro_screens/start/image.png" alt="Start">
+        </button>
 
-    <button id="start-button" class="start-button" type="button" onclick="startGame()" aria-label="Spiel starten">
-        <img src="img/9_intro_outro_screens/start/image.png" alt="Start">
-    </button>
+        <div id="endscreen" class="endscreen" hidden>
+            <button id="restart-button" class="endscreen-button" type="button">Neustart</button>
+            <button id="home-button" class="endscreen-button" type="button">Zum Hauptmenü</button>
+        </div>
+
+        <div id="mobile-controls" class="mobile-controls" hidden>
+            <div class="touch-pad touch-pad-left">
+                <button class="touch-button" data-key="LEFT" type="button" aria-label="Links">◀</button>
+                <button class="touch-button" data-key="RIGHT" type="button" aria-label="Rechts">▶</button>
+            </div>
+            <div class="touch-pad touch-pad-right">
+                <button class="touch-button" data-key="D" type="button" aria-label="Werfen">🧴</button>
+                <button class="touch-button" data-key="SPACE" type="button" aria-label="Springen">⤴</button>
+            </div>
+        </div>
+    </main>
+
+    <dialog id="help-dialog" class="modal" aria-label="Spielanleitung">
+        <div class="modal-card">
+            <h2>Spielanleitung</h2>
+            <ul class="help-list">
+                <li><span class="key">←</span><span class="key">→</span> Laufen</li>
+                <li><span class="key">↑</span> / <span class="key key-wide">Leertaste</span> Springen</li>
+                <li><span class="key">D</span> Flasche werfen</li>
+                <li>Auf Berührung springen, um kleine Hühner zu besiegen.</li>
+                <li>Wirf Flaschen auf den Endboss, um ihn zu schwächen.</li>
+            </ul>
+            <button class="modal-close" type="button" data-close>Schließen</button>
+        </div>
+    </dialog>
+
+    <dialog id="impressum-dialog" class="modal" aria-label="Impressum">
+        <div class="modal-card">
+            <h2>Impressum</h2>
+            <p>Angaben gemäß § 5 TMG (fiktiv):</p>
+            <p><strong>Max Mustermann</strong><br>Musterstraße 1<br>12345 Musterstadt</p>
+            <p>Telefon: 0123 4567890<br>E-Mail: kontakt@example.com</p>
+            <p class="disclaimer">Dieses Impressum dient nur zu Demonstrationszwecken und enthält keine realen Angaben.</p>
+            <button class="modal-close" type="button" data-close>Schließen</button>
+        </div>
+    </dialog>
+
+    <div id="turn-device" class="turn-device" hidden>
+        <p>Drehe dein Gerät ins Querformat, um zu spielen.</p>
+    </div>
+
 </body>
 
 </html>

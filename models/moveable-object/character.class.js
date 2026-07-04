@@ -92,7 +92,7 @@ class Character extends MoveableObject {
 
     animate() {
 
-        setInterval(() => {
+        this._registerInterval(() => {
             if (!this.world || this.isDead() || this.isRemovedFromWorld) {
                 return;
             }
@@ -114,7 +114,7 @@ class Character extends MoveableObject {
         }, 1000 / 60);
 
 
-        setInterval(() => {
+        this._registerInterval(() => {
             if (!this.world || this.isRemovedFromWorld) {
                 return;
             }

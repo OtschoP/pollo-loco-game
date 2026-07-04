@@ -69,12 +69,12 @@ class Endboss extends MoveableObject {
     }
 
     animate() {
-        setInterval(() => {
+        this._registerInterval(() => {
             this.updateActivation();
             this.updateChaseMovement();
         }, 1000 / 60);
 
-        setInterval(() => {
+        this._registerInterval(() => {
             if (this.world?.isGameOver) {
                 return;
             }

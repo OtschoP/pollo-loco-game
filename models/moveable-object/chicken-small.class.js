@@ -37,13 +37,13 @@ class ChickenSmall extends MoveableObject {
     }
 
     animate() {
-        setInterval(() => {
+        this._registerInterval(() => {
             if (!this.isDefeated) {
                 this.moveLeft();
             }
         }, 1000 / 60);
 
-        setInterval(() => {
+        this._registerInterval(() => {
             if (!this.isDefeated) {
                 this.playAnimation(this.IMAGES_WALKING);
             }

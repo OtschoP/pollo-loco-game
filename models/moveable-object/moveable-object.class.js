@@ -13,8 +13,21 @@ class MoveableObject extends DrawableObject {
         left: 0
     };
 
+    _timers = [];
+
+    _registerInterval(callback, ms) {
+        const id = setInterval(callback, ms);
+        this._timers.push(id);
+        return id;
+    }
+
+    stopTimers() {
+        this._timers.forEach((id) => clearInterval(id));
+        this._timers = [];
+    }
+
     applyGravity() {
-        setInterval(() => {
+        this._registerInterval(() => {
             if (this.isAboveGround() || this.speedY > 0) {
                 this.y -= this.speedY;
                 this.speedY -= this.acceleration;

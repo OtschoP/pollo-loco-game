@@ -18,7 +18,8 @@ function createSmallChickens() {
     });
 }
 
-const level1 = new Level([
+function createLevel1() {
+    return new Level([
         ...createChickens(),
         ...createSmallChickens(),
         new Endboss()
@@ -77,3 +78,5 @@ const level1 = new Level([
         new Bottle(2140, 340, 0)
     ]
 );
+}
+

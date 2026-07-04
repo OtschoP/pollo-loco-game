@@ -1,6 +1,6 @@
 class World {
     character = new Character();
-    level = level1;
+    level;
     canvas;
     ctx;
     keyboard;
@@ -11,9 +11,9 @@ class World {
     endbossStatusBar;
     throwableObjects = [];
     collectedCoins = 0;
-    maxCoins = this.level.coins.length;
+    maxCoins = 0;
     collectedBottles = 0;
-    maxBottles = this.level.bottles.length;
+    maxBottles = 0;
     throwKeyPressed = false;
     enemyHitCooldownMs = 600;
     canTakeDamage = true;
@@ -22,19 +22,33 @@ class World {
     gameOverImage = new Image();
     winImage = new Image();
     previousCharacterBottom = null;
+    runIntervalId = null;
+    rafId = null;
+    resetRequested = false;
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard = keyboard;
-        this.endbossStatusBar = new StatusBar('endboss', this.canvas.width - 250, 0, 100);
         this.gameOverImage.src = 'img/9_intro_outro_screens/game_over/game over.png';
         this.winImage.src = 'img/You won, you lost/You Win A.png';
-        this.draw();
+        this.initLevelState();
         this.setWorld();
-        this.updateEndbossStatusBar();
+        this.draw();
         this.run()
+    }
 
+    initLevelState() {
+        this.level = createLevel1();
+        this.maxCoins = this.level.coins.length;
+        this.maxBottles = this.level.bottles.length;
+        this.collectedCoins = 0;
+        this.collectedBottles = 0;
+        this.endbossStatusBar = new StatusBar('endboss', this.canvas.width - 250, 0, 100);
+        this.statusBar.setPercentage(this.character.energy);
+        this.coinStatusBar.setPercentage(0);
+        this.bottleStatusBar.setPercentage(0);
+        this.updateEndbossStatusBar();
     }
 
     setWorld() {
@@ -45,7 +59,7 @@ class World {
     }
 
     run() {
-        setInterval(() => {
+        this.runIntervalId = setInterval(() => {
             if (this.isGameOver || this.isGameWon) {
                 return;
             }
@@ -55,6 +69,41 @@ class World {
             this.checkGameWon();
             this.checkGameOver();
         }, 1000 / 60);
+    }
+
+    stop() {
+        if (this.runIntervalId !== null) {
+            clearInterval(this.runIntervalId);
+            this.runIntervalId = null;
+        }
+        if (this.rafId !== null) {
+            cancelAnimationFrame(this.rafId);
+            this.rafId = null;
+        }
+    }
+
+    stopAllActors() {
+        this.character?.stopTimers?.();
+        this.level?.enemies?.forEach((enemy) => enemy.stopTimers?.());
+        this.throwableObjects.forEach((bottle) => bottle.stopTimers?.());
+    }
+
+    reset() {
+        this.stop();
+        this.stopAllActors();
+        this.throwableObjects = [];
+        this.character = new Character();
+        this.initLevelState();
+        this.isGameOver = false;
+        this.isGameWon = false;
+        this.camera_x = 0;
+        this.previousCharacterBottom = null;
+        this.throwKeyPressed = false;
+        this.canTakeDamage = true;
+        this.resetPressedKeys();
+        this.setWorld();
+        this.draw();
+        this.run();
     }
 
     checkThrowableObjects(){
@@ -218,7 +267,7 @@ class World {
     }
 
     scheduleNextFrame() {
-        requestAnimationFrame(() => {
+        this.rafId = requestAnimationFrame(() => {
             this.draw();
         });
     }

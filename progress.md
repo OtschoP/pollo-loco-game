@@ -37,3 +37,16 @@ Original prompt: kannst Du mir dabei helfen einen offset für die jeweiligen mov
 2026-04-28
 - Added Endboss collision attack behavior: `World.checkCollisions()` now calls `Endboss.startAttack()` when character and Endboss collide.
 - Endboss now plays `IMAGES_ATTACK` once, stands still during the attack, and remains movement-locked for 1000ms after the attack animation finishes.
+
+2026-07-04
+- Abgleich progress.md vs. aktuellem Codestand erstellt (Plan: .kilo/plans/1783101588514-progress-abgleich-vorgehen.md).
+- Festgestellt: Paket A (Quick Wins) bereits erledigt – entgegen plans/checkliste-abarbeitung.md:
+  - Keine console.log-Aufrufe mehr in js/ models/ levels/ (bereits entfernt).
+  - Favicon vorhanden (index.html:7, img/8_coin/coin_1.png).
+  - overflow: hidden gesetzt (style.css, html+body).
+  - HTML lang="de" (index.html:2).
+- plans/checkliste-abarbeitung.md ist für Paket A veraltet; weiterhin gültig für C, D, E, F.
+- Sound-System (Paket B) bewusst aus Scope: audio/-Ordner leer, keine Assets vorhanden.
+- Verbleibende Arbeit: C (UI/Restart), D (Mobile), E (Clean Code vollständig), F (Testing).
+- Restart-Entscheidung: World.reset() in-place; zwingend Timer-Handle-Speicherung gegen Intervall-Leaks + Level-Factory (createLevel1()).
+- Clean-Code-Entscheidung: vollständig (alle >14-Zeilen-Funktionen + JSDoc).
