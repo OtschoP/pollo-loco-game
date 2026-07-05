@@ -1,6 +1,11 @@
+/**
+ * Represents a normal-sized chicken enemy that walks left.
+ * @extends MoveableObject
+ */
 class Chicken extends MoveableObject {
     y = 350;
     height = 80;
+    /** Whether the chicken has been defeated (stops movement/animation). */
     isDefeated = false;
     offset = {
         top: 8,
@@ -14,8 +19,12 @@ class Chicken extends MoveableObject {
         'img/3_enemies_chicken/chicken_normal/1_walk/3_w.png'
     ];
     DEAD_IMAGE = 'img/3_enemies_chicken/chicken_normal/2_dead/dead.png';
-    
 
+    /**
+     * Creates a new Chicken.
+     * @param {number|null} [x=null] - Horizontal position (random if null).
+     * @param {number|null} [speed=null] - Movement speed (random if null).
+     */
     constructor(x = null, speed = null) {
         super().loadImage('img/3_enemies_chicken/chicken_normal/1_walk/1_w.png');
         this.loadImages(this.IMAGES_WALKING);
@@ -26,6 +35,7 @@ class Chicken extends MoveableObject {
         this.animate();
     }
 
+    /** Marks the chicken as defeated and shows the dead image. */
     die() {
         if (this.isDefeated) {
             return;
@@ -36,6 +46,7 @@ class Chicken extends MoveableObject {
         this.img = this.imageCache[this.DEAD_IMAGE];
     }
 
+    /** Starts movement and walking-animation intervals. */
     animate() {
         this._registerInterval(() => {
             if (!this.isDefeated) {

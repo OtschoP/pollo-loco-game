@@ -1,13 +1,22 @@
+/**
+ * Represents the Endboss – the final, stronger enemy that chases the player once activated.
+ * @extends MoveableObject
+ */
 class Endboss extends MoveableObject {
 
     height = 400;
     width = 250;
     y = 70;
     speed = 2.2;
+    /** Distance (px) at which the endboss activates when the player approaches. */
     activationDistance = 450;
+    /** Whether the endboss has been activated (starts chasing). */
     isActivated = false;
+    /** Whether the endboss is currently playing its attack animation. */
     isAttacking = false;
+    /** Timestamp until which movement is locked after an attack. */
     attackCooldownUntil = 0;
+    /** Reference to the World instance. */
     world;
     offset = {
         top: 70,
@@ -57,6 +66,7 @@ class Endboss extends MoveableObject {
         'img/4_enemie_boss_chicken/5_dead/G26.png'
     ];
 
+    /** Creates a new Endboss at x=2200 and starts animation intervals. */
     constructor() {
         super().loadImage(this.IMAGES_WALKING[0]);
         this.loadImages(this.IMAGES_WALKING);
@@ -68,6 +78,7 @@ class Endboss extends MoveableObject {
         this.animate();
     }
 
+    /** Starts activation/movement (60 fps) and animation-state (120 ms) intervals. */
     animate() {
         this._registerInterval(() => {
             this.updateActivation();
@@ -103,6 +114,7 @@ class Endboss extends MoveableObject {
         }, 120);
     }
 
+    /** Takes a bottle hit, activates the endboss if not already active. */
     takeBottleHit() {
         if (this.isDead()) {
             return;
@@ -112,6 +124,7 @@ class Endboss extends MoveableObject {
         this.isActivated = true;
     }
 
+    /** Starts the attack animation if not on cooldown or already attacking. */
     startAttack() {
         if (this.isDead() || this.isMovementLocked()) {
             return;
@@ -123,6 +136,7 @@ class Endboss extends MoveableObject {
         this.currentImage = 0;
     }
 
+    /** Plays the attack animation once, then locks movement for 1 second. */
     playAttackAnimationOnce() {
         const frameIndex = Math.min(this.currentImage, this.IMAGES_ATTACK.length - 1);
         const framePath = this.IMAGES_ATTACK[frameIndex];
@@ -135,10 +149,16 @@ class Endboss extends MoveableObject {
         }
     }
 
+    /**
+     * Returns whether the endboss is currently movement-locked
+     * (attacking or in post-attack cooldown).
+     * @returns {boolean} `true` if movement is locked.
+     */
     isMovementLocked() {
         return this.isAttacking || Date.now() < this.attackCooldownUntil;
     }
 
+    /** Activates the endboss when the player enters activation distance. */
     updateActivation() {
         if (this.isActivated || !this.world || this.world.isGameOver) {
             return;
@@ -150,6 +170,7 @@ class Endboss extends MoveableObject {
         }
     }
 
+    /** Chases the player horizontally when activated and not locked. */
     updateChaseMovement() {
         if (!this.isActivated || !this.world || this.world.isGameOver || this.isDead() || this.isMovementLocked()) {
             return;

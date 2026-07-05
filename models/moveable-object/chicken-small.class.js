@@ -1,7 +1,12 @@
+/**
+ * Represents a small chicken enemy that walks left, faster than the normal chicken.
+ * @extends MoveableObject
+ */
 class ChickenSmall extends MoveableObject {
     y = 370;
     height = 60;
     width = 60;
+    /** Whether the small chicken has been defeated. */
     isDefeated = false;
     offset = {
         top: 6,
@@ -16,6 +21,11 @@ class ChickenSmall extends MoveableObject {
     ];
     DEAD_IMAGE = 'img/3_enemies_chicken/chicken_small/2_dead/dead.png';
 
+    /**
+     * Creates a new ChickenSmall.
+     * @param {number|null} [x=null] - Horizontal position (random if null).
+     * @param {number|null} [speed=null] - Movement speed (random if null).
+     */
     constructor(x = null, speed = null) {
         super().loadImage(this.IMAGES_WALKING[0]);
         this.loadImages(this.IMAGES_WALKING);
@@ -26,6 +36,7 @@ class ChickenSmall extends MoveableObject {
         this.animate();
     }
 
+    /** Marks the small chicken as defeated and shows the dead image. */
     die() {
         if (this.isDefeated) {
             return;
@@ -36,6 +47,7 @@ class ChickenSmall extends MoveableObject {
         this.img = this.imageCache[this.DEAD_IMAGE];
     }
 
+    /** Starts movement and walking-animation intervals. */
     animate() {
         this._registerInterval(() => {
             if (!this.isDefeated) {

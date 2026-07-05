@@ -1,3 +1,4 @@
+/** Creates normal-sized chicken enemies at fixed base positions with randomised offset and speed. */
 function createChickens() {
     const basePositions = [320, 540, 760, 980, 1200, 1420, 1640, 1860];
 
@@ -8,6 +9,7 @@ function createChickens() {
     });
 }
 
+/** Creates small chicken enemies at fixed base positions with randomised offset and speed. */
 function createSmallChickens() {
     const basePositions = [450, 890, 1330, 1770];
 
@@ -18,6 +20,11 @@ function createSmallChickens() {
     });
 }
 
+/**
+ * Factory that builds a fresh Level 1 instance with enemies, clouds,
+ * background layers, coins, and bottles.
+ * @returns {Level} A new Level instance.
+ */
 function createLevel1() {
     return new Level([
         ...createChickens(),

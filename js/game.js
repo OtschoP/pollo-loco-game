@@ -1,11 +1,18 @@
+/** @type {HTMLCanvasElement} */
 let canvas;
+/** @type {World} */
 let world;
+/** Shared keyboard input state. */
 let keyboard = new Keyboard();
+/** Whether the game has been started (prevents re-entry). */
 let hasGameStarted = false;
+/** Start screen background image. */
 let startScreenImage = new Image();
+/** Interval ID for the endscreen watcher. */
 let endscreenWatcherId = null;
 
 
+/** Entry point: sets up the canvas, start screen, UI, and touch controls. */
 function init() {
     canvas = document.getElementById('canvas');
     startScreenImage.src = 'img/9_intro_outro_screens/start/startscreen_1.png';
@@ -20,6 +27,7 @@ function init() {
     wireTouchControls();
 }
 
+/** Draws the start screen image onto the canvas if the game hasn't started. */
 function drawStartScreen() {
     if (!canvas || hasGameStarted) {
         return;
@@ -30,6 +38,7 @@ function drawStartScreen() {
     ctx.drawImage(startScreenImage, 0, 0, canvas.width, canvas.height);
 }
 
+/** Starts the game: hides the start button and creates a new World. */
 function startGame() {
     document.getElementById('start-button').blur();
 
@@ -43,16 +52,19 @@ function startGame() {
     startEndscreenWatcher();
 }
 
+/** Hides the start button by setting its `hidden` attribute. */
 function hideStartButton() {
     document.getElementById('start-button').hidden = true;
 }
 
+/** Shows the start button again and removes focus. */
 function showStartButton() {
     const button = document.getElementById('start-button');
     button.hidden = false;
     button.blur();
 }
 
+/** Restarts the game by calling World.reset() without a page reload. */
 function restartGame() {
     hideEndscreen();
     if (world) {
@@ -60,6 +72,7 @@ function restartGame() {
     }
 }
 
+/** Returns to the home screen: stops the world, shows the start button and start screen. */
 function backToHome() {
     hideEndscreen();
     if (world) {
@@ -72,6 +85,7 @@ function backToHome() {
     drawStartScreen();
 }
 
+/** Starts a polling interval that shows the endscreen when the game ends. */
 function startEndscreenWatcher() {
     if (endscreenWatcherId !== null) {
         return;
@@ -84,14 +98,17 @@ function startEndscreenWatcher() {
     }, 200);
 }
 
+/** Shows the endscreen overlay (Restart + Home buttons). */
 function showEndscreen() {
     document.getElementById('endscreen').hidden = false;
 }
 
+/** Hides the endscreen overlay. */
 function hideEndscreen() {
     document.getElementById('endscreen').hidden = true;
 }
 
+/** Wires all UI elements: restart/home buttons, dialogs, fullscreen. */
 function wireUi() {
     document.getElementById('restart-button').addEventListener('click', restartGame);
     document.getElementById('home-button').addEventListener('click', backToHome);
@@ -102,6 +119,11 @@ function wireUi() {
     wireFullscreen();
 }
 
+/**
+ * Wires a trigger button to open a <dialog> and closes it on backdrop click.
+ * @param {string} triggerId - ID of the trigger button.
+ * @param {string} dialogId - ID of the dialog element.
+ */
 function wireDialog(triggerId, dialogId) {
     const trigger = document.getElementById(triggerId);
     const dialog = document.getElementById(dialogId);
@@ -115,6 +137,7 @@ function wireDialog(triggerId, dialogId) {
     });
 }
 
+/** Wires all `[data-close]` buttons to close their nearest dialog. */
 function wireDialogCloseOnBackdrop() {
     document.querySelectorAll('[data-close]').forEach((button) => {
         button.addEventListener('click', (event) => {
@@ -126,10 +149,12 @@ function wireDialogCloseOnBackdrop() {
     });
 }
 
+/** Wires the fullscreen toggle button. */
 function wireFullscreen() {
     document.getElementById('fullscreen-button').addEventListener('click', toggleFullscreen);
 }
 
+/** Toggles between fullscreen and windowed mode using the Fullscreen API. */
 function toggleFullscreen() {
     if (!document.fullscreenElement) {
         document.documentElement.requestFullscreen?.();
@@ -138,6 +163,7 @@ function toggleFullscreen() {
     document.exitFullscreen?.();
 }
 
+/** Wires all mobile touch buttons to set keyboard flags via touchstart/touchend. */
 function wireTouchControls() {
     document.querySelectorAll('.touch-button').forEach((button) => {
         const key = button.dataset.key;
@@ -158,6 +184,11 @@ function wireTouchControls() {
     });
 }
 
+/**
+ * Sets a keyboard flag to the given value.
+ * @param {string} key - Keyboard property name (e.g. 'LEFT', 'SPACE').
+ * @param {boolean} value - Whether the key is pressed.
+ */
 function setKey(key, value) {
     if (!keyboard) {
         return;

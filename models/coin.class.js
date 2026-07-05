@@ -1,3 +1,7 @@
+/**
+ * Represents a collectible coin in the game world.
+ * @extends MoveableObject
+ */
 class Coin extends MoveableObject {
     height = 120;
     width = 120;
@@ -14,6 +18,12 @@ class Coin extends MoveableObject {
         'img/8_coin/coin_2.png'
     ];
 
+    /**
+     * Creates a new Coin.
+     * @param {number} x - Horizontal position.
+     * @param {number} y - Vertical position.
+     * @param {number} [variant=0] - Image variant index (0 or 1).
+     */
     constructor(x, y, variant = 0) {
         super();
         this.x = x;

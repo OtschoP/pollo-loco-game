@@ -1,6 +1,13 @@
+/**
+ * Represents a throwable bottle object with rotation and splash animations.
+ * @extends MoveableObject
+ */
 class ThrowableObject extends MoveableObject {
+    /** Horizontal throw speed. */
     speedX = 0;
+    /** Whether the splash animation has started. */
     hasSplashed = false;
+    /** Whether the object should be removed from the world. */
     isMarkedForRemoval = false;
     throwInterval = null;
     splashCheckInterval = null;
@@ -21,6 +28,12 @@ class ThrowableObject extends MoveableObject {
         'img/6_salsa_bottle/bottle_rotation/bottle_splash/6_bottle_splash.png'
     ];
 
+    /**
+     * Creates a new ThrowableObject.
+     * @param {number} x - Horizontal start position.
+     * @param {number} y - Vertical start position.
+     * @param {boolean} [otherDirection=false] - Whether the bottle flies left.
+     */
     constructor(x, y, otherDirection = false) {
         super().loadImage(this.IMAGES_ROTATION[0]);
         this.loadImages(this.IMAGES_ROTATION);
@@ -33,6 +46,7 @@ class ThrowableObject extends MoveableObject {
         this.throw();
     }
 
+    /** Applies gravity, horizontal movement, splash detection, and rotation. */
     throw(){
         this.speedY = 20;
         this.speedX = 10;
@@ -57,6 +71,7 @@ class ThrowableObject extends MoveableObject {
         }, 80);
     }
 
+    /** Stops flight timers and plays the splash animation once, then marks for removal. */
     startSplashAnimation() {
         this.hasSplashed = true;
         this.y = 360;

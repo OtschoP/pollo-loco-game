@@ -1,3 +1,7 @@
+/**
+ * Represents a status bar (health, coins, bottles, or endboss) drawn on the canvas.
+ * @extends DrawableObject
+ */
 class StatusBar extends DrawableObject {
 
     HEALTH_IMAGES = [
@@ -39,6 +43,13 @@ class StatusBar extends DrawableObject {
     IMAGES = [];
     percentage = 100;
 
+    /**
+     * Creates a new StatusBar.
+     * @param {string} [type='health'] - Bar type: 'health', 'coin', 'bottle', or 'endboss'.
+     * @param {number} [x=50] - Horizontal position on the canvas.
+     * @param {number} [y=20] - Vertical position on the canvas.
+     * @param {number} [percentage=100] - Initial fill percentage (0–100).
+     */
     constructor(type = 'health', x = 50, y = 20, percentage = 100) {
         super();
         this.IMAGES = this.getImagesByType(type);
@@ -51,6 +62,11 @@ class StatusBar extends DrawableObject {
 
     }
 
+    /**
+     * Returns the image set for the given bar type.
+     * @param {string} type - One of 'health', 'coin', 'bottle', 'endboss'.
+     * @returns {string[]} Array of image paths.
+     */
     getImagesByType(type) {
         if (type == 'coin') {
             return this.COIN_IMAGES;
@@ -63,11 +79,20 @@ class StatusBar extends DrawableObject {
         }
     }
 
+    /**
+     * Sets the fill percentage and updates the displayed image.
+     * @param {number} percentage - Fill value (clamped to 0–100).
+     */
     setPercentage(percentage) {
         this.percentage = Math.max(0, Math.min(100, percentage));
         let path = this.IMAGES[this.resolveImageIndex()];
         this.img = this.imageCache[path];
     }
+
+    /**
+     * Resolves the image index (0–5) for the current percentage.
+     * @returns {number} Index into the IMAGES array.
+     */
     resolveImageIndex() {
         if (this.percentage == 100) {
             return 5;
