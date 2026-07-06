@@ -50,3 +50,9 @@ Original prompt: kannst Du mir dabei helfen einen offset für die jeweiligen mov
 - Verbleibende Arbeit: C (UI/Restart), D (Mobile), E (Clean Code vollständig), F (Testing).
 - Restart-Entscheidung: World.reset() in-place; zwingend Timer-Handle-Speicherung gegen Intervall-Leaks + Level-Factory (createLevel1()).
 - Clean-Code-Entscheidung: vollständig (alle >14-Zeilen-Funktionen + JSDoc).
+
+2026-07-06
+- Adjusted responsive CSS for short landscape viewports such as iPhone SE DevTools size 667x375.
+- `.game-stage` now keeps the 3:2 canvas ratio by deriving displayed width from available `100dvh` height; internal canvas dimensions remain 720x480.
+- In `max-height: 480px`, header/buttons/touch controls/start/end overlays are compacted so the full play area stays within the viewport.
+- Avoided CSS calc multiplication by using equivalent `calc(150dvh - ...)` formulas for browser compatibility.
