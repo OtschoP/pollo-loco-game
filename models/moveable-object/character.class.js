@@ -88,6 +88,10 @@ class Character extends MoveableObject {
     idleAnimationFinished = false;
     /** Current frame index within the idle animation. */
     idleImageIndex = 0;
+    /** Whether the character was airborne in the previous movement tick. */
+    wasAboveGround = false;
+    /** Timestamp of the hit that last played the character-hit sound. */
+    lastCharacterHitSoundAt = 0;
 
     /** Creates a new Character, preloads all images, and starts gravity + animation. */
     constructor() {
@@ -116,6 +120,7 @@ class Character extends MoveableObject {
 
         this.handleHorizontalMovement();
         this.handleJump();
+        this.handleLandingSound();
 
         this.world.camera_x = -this.x + 100;
     }
@@ -139,7 +144,18 @@ class Character extends MoveableObject {
         const jumpRequested = this.world.keyboard.SPACE || this.world.keyboard.UP;
         if (jumpRequested && !this.isAboveGround()) {
             this.jump();
+            this.wasAboveGround = true;
+            this.world.soundManager.play('jump');
         }
+    }
+
+    /** Plays a landing sound once when the character touches the ground after a jump. */
+    handleLandingSound() {
+        const isAboveGround = this.isAboveGround();
+        if (this.wasAboveGround && !isAboveGround) {
+            this.world.soundManager.play('land');
+        }
+        this.wasAboveGround = isAboveGround;
     }
 
     /** Selects the appropriate animation based on current state (dead, hurt, airborne, walking, idle). */
@@ -150,18 +166,22 @@ class Character extends MoveableObject {
 
         if (this.isDead()) {
             this.markActivity();
+            this.world.soundManager.stop('footsteps');
             this.playDeathAnimationOnce();
             return;
         }
 
         if (this.isHurt()) {
             this.markActivity();
+            this.world.soundManager.stop('footsteps');
+            this.playCharacterHitSoundOnce();
             this.playAnimation(this.IMAGES_HURT);
             return;
         }
 
         if (this.isAboveGround()) {
             this.markActivity();
+            this.world.soundManager.stop('footsteps');
             this.playAnimation(this.IMAGES_JUMPING);
             return;
         }
@@ -175,11 +195,23 @@ class Character extends MoveableObject {
 
         if (isWalking) {
             this.markActivity();
+            this.world.soundManager.playLoop('footsteps');
             this.playAnimation(this.IMAGES_WALKING);
             return;
         }
 
+        this.world.soundManager.stop('footsteps');
         this.playIdleAnimation();
+    }
+
+    /** Plays the character hit sound once for each recorded hit. */
+    playCharacterHitSoundOnce() {
+        if (this.lastHit <= this.lastCharacterHitSoundAt) {
+            return;
+        }
+
+        this.world.soundManager.play('characterHit');
+        this.lastCharacterHitSoundAt = this.lastHit;
     }
 
     /** Plays the idle intro once, then loops the long-idle animation. */
@@ -189,6 +221,7 @@ class Character extends MoveableObject {
             return;
         }
 
+        this.world.soundManager.playLoop('snore');
         this.playAnimation(this.IMAGES_LONG_IDLE);
     }
 
@@ -220,6 +253,7 @@ class Character extends MoveableObject {
     /** Marks activity (resets idle) – called on walk, jump, hurt, or death. */
     markActivity() {
         this.resetIdleAnimation();
+        this.world.soundManager.stop('snore');
     }
 
     /** Plays the death animation once, then removes the character from the world. */

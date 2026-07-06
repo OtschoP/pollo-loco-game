@@ -13,6 +13,8 @@ class ThrowableObject extends MoveableObject {
     splashCheckInterval = null;
     splashAnimationInterval = null;
     rotationAnimationInterval = null;
+    /** Shared audio controller. */
+    soundManager = null;
     IMAGES_ROTATION = [
         'img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png',
         'img/6_salsa_bottle/bottle_rotation/2_bottle_rotation.png',
@@ -33,14 +35,16 @@ class ThrowableObject extends MoveableObject {
      * @param {number} x - Horizontal start position.
      * @param {number} y - Vertical start position.
      * @param {boolean} [otherDirection=false] - Whether the bottle flies left.
+     * @param {SoundManager|null} [soundManager=null] - Shared audio controller.
      */
-    constructor(x, y, otherDirection = false) {
+    constructor(x, y, otherDirection = false, soundManager = null) {
         super().loadImage(this.IMAGES_ROTATION[0]);
         this.loadImages(this.IMAGES_ROTATION);
         this.loadImages(this.IMAGES_SPLASH);
         this.x = x;
         this.y = y;
         this.otherDirection = otherDirection;
+        this.soundManager = soundManager;
         this.height = 60;
         this.width = 50;
         this.throw();
@@ -73,7 +77,12 @@ class ThrowableObject extends MoveableObject {
 
     /** Stops flight timers and plays the splash animation once, then marks for removal. */
     startSplashAnimation() {
+        if (this.hasSplashed) {
+            return;
+        }
+
         this.hasSplashed = true;
+        this.soundManager?.play('bottleSplash');
         this.y = 360;
         this.speedY = 0;
         clearInterval(this.throwInterval);

@@ -4,6 +4,8 @@ let canvas;
 let world;
 /** Shared keyboard input state. */
 let keyboard = new Keyboard();
+/** Shared audio controller. */
+let soundManager;
 /** Whether the game has been started (prevents re-entry). */
 let hasGameStarted = false;
 /** Start screen background image. */
@@ -15,6 +17,7 @@ let endscreenWatcherId = null;
 /** Entry point: sets up the canvas, start screen, UI, and touch controls. */
 function init() {
     canvas = document.getElementById('canvas');
+    soundManager = new SoundManager();
     startScreenImage.src = 'img/9_intro_outro_screens/start/startscreen_1.png';
 
     if (startScreenImage.complete) {
@@ -48,7 +51,7 @@ function startGame() {
 
     hasGameStarted = true;
     hideStartButton();
-    world = new World(canvas, keyboard);
+    world = new World(canvas, keyboard, soundManager);
     startEndscreenWatcher();
 }
 
@@ -80,6 +83,7 @@ function backToHome() {
         world.stopAllActors();
         world = null;
     }
+    soundManager.stopAll();
     hasGameStarted = false;
     showStartButton();
     drawStartScreen();
@@ -117,6 +121,7 @@ function wireUi() {
     wireDialog('impressum-button', 'impressum-dialog');
     wireDialogCloseOnBackdrop();
     wireFullscreen();
+    wireMuteButton();
 }
 
 /**
@@ -161,6 +166,24 @@ function toggleFullscreen() {
         return;
     }
     document.exitFullscreen?.();
+}
+
+/** Wires the mute toggle button and reflects the persisted sound state. */
+function wireMuteButton() {
+    const muteButton = document.getElementById('mute-button');
+    updateMuteButton();
+    muteButton.addEventListener('click', () => {
+        soundManager.toggleMuted();
+        updateMuteButton();
+    });
+}
+
+/** Updates the mute button icon and accessible label. */
+function updateMuteButton() {
+    const muteButton = document.getElementById('mute-button');
+    const isMuted = soundManager.isMuted();
+    muteButton.textContent = isMuted ? '×' : '♪';
+    muteButton.setAttribute('aria-label', isMuted ? 'Ton einschalten' : 'Ton ausschalten');
 }
 
 /** Wires all mobile touch buttons to set keyboard flags via touchstart/touchend. */

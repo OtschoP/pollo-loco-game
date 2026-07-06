@@ -13,6 +13,8 @@ class World {
     ctx;
     /** Keyboard input state. */
     keyboard;
+    /** Shared sound manager. */
+    soundManager;
     /** Camera x-offset for scrolling. */
     camera_x = 0;
     /** Health status bar. */
@@ -60,11 +62,13 @@ class World {
      * Creates a new World, initialises the level, and starts the game loop.
      * @param {HTMLCanvasElement} canvas - The canvas to render onto.
      * @param {Keyboard} keyboard - Shared keyboard input state.
+     * @param {SoundManager} soundManager - Shared audio controller.
      */
-    constructor(canvas, keyboard) {
+    constructor(canvas, keyboard, soundManager) {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard = keyboard;
+        this.soundManager = soundManager;
         this.gameOverImage.src = 'img/9_intro_outro_screens/game_over/game over.png';
         this.winImage.src = 'img/You won, you lost/You Win A.png';
         this.renderer = new WorldRenderer(this);
@@ -72,6 +76,7 @@ class World {
         this.initLevelState();
         this.setWorld();
         this.draw();
+        this.soundManager.playLoop('music');
         this.run()
     }
 
@@ -134,6 +139,7 @@ class World {
     reset() {
         this.stop();
         this.stopAllActors();
+        this.soundManager.stopAll();
         this.throwableObjects = [];
         this.character = new Character();
         this.initLevelState();
@@ -146,6 +152,7 @@ class World {
         this.resetPressedKeys();
         this.setWorld();
         this.draw();
+        this.soundManager.playLoop('music');
         this.run();
     }
 
@@ -157,10 +164,16 @@ class World {
 
         if (this.keyboard.D && !this.throwKeyPressed && this.collectedBottles > 0) {
             let xOffset = this.character.otherDirection ? 0 : 50;
-            let bottle = new ThrowableObject(this.character.x + xOffset, this.character.y + 100, this.character.otherDirection);
+            let bottle = new ThrowableObject(
+                this.character.x + xOffset,
+                this.character.y + 100,
+                this.character.otherDirection,
+                this.soundManager
+            );
             this.throwableObjects.push(bottle);
             this.collectedBottles--;
             this.updateBottleStatusBar();
+            this.soundManager.play('bottleThrow');
         }
 
         this.throwKeyPressed = this.keyboard.D;
@@ -171,6 +184,10 @@ class World {
         if (!this.isGameOver && this.character.isDead()) {
             this.isGameOver = true;
             this.resetPressedKeys();
+            this.soundManager.stop('music');
+            this.soundManager.stop('snore');
+            this.soundManager.stop('footsteps');
+            this.soundManager.play('youLose');
         }
     }
 
@@ -184,6 +201,10 @@ class World {
         if (endbosses.length > 0 && endbosses.every((endboss) => endboss.isDead())) {
             this.isGameWon = true;
             this.resetPressedKeys();
+            this.soundManager.stop('music');
+            this.soundManager.stop('snore');
+            this.soundManager.stop('footsteps');
+            this.soundManager.play('youWin');
         }
     }
 

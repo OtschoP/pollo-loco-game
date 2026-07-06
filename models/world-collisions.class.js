@@ -52,6 +52,7 @@ class WorldCollisions {
 
         if (this.isStompCollision(enemy, characterHitbox, previousCharacterBottom)) {
             enemy.die();
+            w.soundManager.play('chickenDeath');
             this.bounceAfterStomp();
             return;
         }
@@ -120,6 +121,7 @@ class WorldCollisions {
             w.updateEndbossStatusBar(enemy);
         } else {
             enemy.die();
+            w.soundManager.play('chickenDeath');
         }
 
         bottle.startSplashAnimation();
@@ -162,6 +164,7 @@ class WorldCollisions {
         if (type === 'coins') {
             w.collectedCoins++;
             w.updateCoinStatusBar();
+            w.soundManager.play('coinPickup');
             return;
         }
 
