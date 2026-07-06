@@ -19,14 +19,16 @@ class SoundManager {
             music: this.createAudio('audio/music.ogg', 0.22, true),
             jump: this.createAudio('audio/jump.ogg', 0.15),
             land: this.createAudio('audio/land.ogg', 0.15),
-            footsteps: this.createAudio('audio/footsteps.wav', 0.15, true),
+            footsteps: this.createAudio('audio/footsteps.ogg', 0.15, true),
             bottleThrow: this.createAudio('audio/bottle_throw.ogg', 0.5),
             bottleSplash: this.createAudio('audio/bottle_splash.ogg', 0.55),
-            coinPickup: this.createAudio('audio/Pickup:coin.wav', 0.4),
-            chickenDeath: this.createAudio('audio/chicken_death.ogg', 0.55),
-            characterHit: this.createAudio('audio/character_hit.wav', 0.25),
-            youLose: this.createAudio('audio/you_lose.wav', 0.5),
-            youWin: this.createAudio('audio/you_win.wav', 0.5),
+            coinPickup: this.createAudio('audio/pickup_coin.ogg', 0.4),
+            chickenDeath: this.createAudio('audio/chicken_death.ogg', 0.4),
+            characterHit: this.createAudio('audio/character_hit.ogg', 0.25),
+            youLose: this.createAudio('audio/you_lose.ogg', 0.5),
+            youWin: this.createAudio('audio/you_win.ogg', 0.5),
+            bossStart: this.createAudio('audio/boss_start.mp3', 0.2),
+            bottleCollect: this.createAudio('audio/bottle_collect.ogg', 0.8),
             snore: this.createAudio('audio/snore.ogg', 0.20, true)
         };
         this.muted = this.readMutedState();

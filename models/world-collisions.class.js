@@ -170,6 +170,7 @@ class WorldCollisions {
 
         w.collectedBottles++;
         w.updateBottleStatusBar();
+        w.soundManager.play('bottleCollect');
     }
 
     /**

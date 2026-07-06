@@ -121,7 +121,7 @@ class Endboss extends MoveableObject {
         }
 
         this.hit();
-        this.isActivated = true;
+        this.activate();
     }
 
     /** Starts the attack animation if not on cooldown or already attacking. */
@@ -130,7 +130,7 @@ class Endboss extends MoveableObject {
             return;
         }
 
-        this.isActivated = true;
+        this.activate();
         this.isAttacking = true;
         this.currentAnimation = this.IMAGES_ATTACK;
         this.currentImage = 0;
@@ -166,8 +166,18 @@ class Endboss extends MoveableObject {
 
         const characterDistance = Math.abs(this.world.character.x - this.x);
         if (characterDistance <= this.activationDistance) {
-            this.isActivated = true;
+            this.activate();
         }
+    }
+
+    /** Activates the endboss once and plays the boss-start sound. */
+    activate() {
+        if (this.isActivated) {
+            return;
+        }
+
+        this.isActivated = true;
+        this.world?.soundManager?.play('bossStart');
     }
 
     /** Chases the player horizontally when activated and not locked. */
