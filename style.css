@@ -24,6 +24,7 @@ body{
 }
 
 .top-bar {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -38,11 +39,14 @@ h1{
     font-size: 50px;
     margin: 0;
     text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.5);
-    flex: 1;
     text-align: center;
 }
 
 .top-actions {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
     display: flex;
     gap: 8px;
 }
