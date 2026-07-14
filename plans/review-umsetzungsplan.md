@@ -6,6 +6,7 @@ Basierend auf `review.md` — Mängel gezielt beheben.
 
 ## Issue 1: Projektstruktur — `classes`-Ordner fehlt
 
+- **Status:** Erledigt — `models/` wurde in `classes/` umbenannt und `index.html` lädt die Klassendateien aus `classes/`.
 - **Betroffen:** Alle `*.class.js`-Dateien liegen in `models/` statt in `classes/`
 - **Lösung:** Ordner `models/` umbenennen in `classes/` oder neuen Ordner `classes/` anlegen und Dateien verschieben
 - **Aufwand:** Niedrig — reine Umbenennung, dann Pfade in allen `<script>`-Tags in `index.html` und allen `import`-artigen Referenzen anpassen
@@ -60,7 +61,7 @@ Basierend auf `review.md` — Mängel gezielt beheben.
 
 ### 6a: `camera_x` in `world.class.js:19`
 
-- **Betroffen:** `models/world.class.js` Zeile 19: `camera_x`
+- **Betroffen:** `classes/world.class.js` Zeile 19: `camera_x`
 - **Lösung:** Umbenennen zu `cameraX` — alle Referenzen anpassen:
   - `world.class.js` interne Nutzung
   - `world-renderer.class.js` (Zugriff auf `world.camera_x`)
@@ -69,7 +70,7 @@ Basierend auf `review.md` — Mängel gezielt beheben.
 
 ### 6b: `level_end_x` in `level.class.js:18`
 
-- **Betroffen:** `models/level.class.js` Zeile 18: `level_end_x`
+- **Betroffen:** `classes/level.class.js` Zeile 18: `level_end_x`
 - **Lösung:** Umbenennen zu `levelEndX` — alle Referenzen anpassen:
   - `level.class.js` (Setter/Getter)
   - `world.class.js` (Zugriff auf `this.level.level_end_x`)
@@ -82,7 +83,7 @@ Basierend auf `review.md` — Mängel gezielt beheben.
 
 ## Issue 7: Doppeltes `isDead()` in `moveable-object.class.js`
 
-- **Betroffen:** `models/moveable-object/moveable-object.class.js`
+- **Betroffen:** `classes/moveable-object/moveable-object.class.js`
   - Zeile 116: `isDead() { return this.energy == 0; }`
   - Zeile 139: `isDead() { return this.energy <= 0; }`
 - **Lösung:** Die erste Definition (Zeile 116) entfernen, die zweite (Zeile 139, korrekte Logik `<=`) behalten
@@ -100,26 +101,26 @@ Alle betroffenen Funktionen und deren Aufteilung:
 | `js/game.js:222` | `keydown`-Callback | 28 | Key-Map auslagern, Event-Wiring in eigene Funktion |
 | `js/game.js:251` | `keyup`-Callback | 28 | Wie keydown |
 | `levels/level1.js:28` | `createLevel1` | 61 | `createClouds()`, `createBackgroundObjects()`, `createCoins()`, `createBottles()` auslagern |
-| `models/world.class.js:67` | `constructor` | 15 | Initialisierung in `initCanvas()` und `initRenderer()` auslagern |
-| `models/world.class.js:139` | `reset` | 19 | `resetActors()` und `resetGameState()` auslagern |
-| `models/world.class.js:160` | `checkThrowableObjects` | 21 | `canThrow()` und `spawnBottle()` auslagern |
-| `models/world.class.js:195` | `checkGameWon` | 15 | Prüfung + UI-Aufruf trennen |
-| `models/world-collisions.class.js:40` | `handleEnemyCollision` | 22 | `handleStomp()`, `handleDamage()`, `handleEndbossAttack()` auslagern |
-| `models/moveable-object/character.class.js:162` | `updateAnimation` | 29 | `handleDeadState()`, `handleHurtState()`, `handleAirborneState()`, `handleGroundState()` |
-| `models/moveable-object/character.class.js:229` | `playIdleAnimationOnce` | 17 | Animation-Logik + Zustandsübergang trennen |
-| `models/moveable-object/character.class.js:260` | `playDeathAnimationOnce` | 20 | Frame-Iteration und World-Removal trennen |
-| `models/moveable-object/endboss.class.js:82` | `animate` | 34 | `handleMovement()`, `handleAnimationState()` auslagern |
-| `models/moveable-object/endboss.class.js:184` | `updateChaseMovement` | 16 | Richtungslogik und Bewegung trennen |
-| `models/throwable-object.class.js:54` | `throw` | 23 | `startFlight()`, `startSplashCheck()`, `startRotationAnimation()` auslagern |
-| `models/throwable-object.class.js:79` | `startSplashAnimation` | 24 | Frame-Iteration und Cleanup trennen |
-| `models/sound-manager.class.js:17` | `constructor` | 20 | Sound-Definitionen in Konstante oder `initSounds()` auslagern |
-| `models/status-bar.class.js:96` | `resolveImageIndex` | 15 | Über if/else-if-Kette → evtl. kompakter via `Math.min(Math.floor(percentage / 20), 5)` |
+| `classes/world.class.js:67` | `constructor` | 15 | Initialisierung in `initCanvas()` und `initRenderer()` auslagern |
+| `classes/world.class.js:139` | `reset` | 19 | `resetActors()` und `resetGameState()` auslagern |
+| `classes/world.class.js:160` | `checkThrowableObjects` | 21 | `canThrow()` und `spawnBottle()` auslagern |
+| `classes/world.class.js:195` | `checkGameWon` | 15 | Prüfung + UI-Aufruf trennen |
+| `classes/world-collisions.class.js:40` | `handleEnemyCollision` | 22 | `handleStomp()`, `handleDamage()`, `handleEndbossAttack()` auslagern |
+| `classes/moveable-object/character.class.js:162` | `updateAnimation` | 29 | `handleDeadState()`, `handleHurtState()`, `handleAirborneState()`, `handleGroundState()` |
+| `classes/moveable-object/character.class.js:229` | `playIdleAnimationOnce` | 17 | Animation-Logik + Zustandsübergang trennen |
+| `classes/moveable-object/character.class.js:260` | `playDeathAnimationOnce` | 20 | Frame-Iteration und World-Removal trennen |
+| `classes/moveable-object/endboss.class.js:82` | `animate` | 34 | `handleMovement()`, `handleAnimationState()` auslagern |
+| `classes/moveable-object/endboss.class.js:184` | `updateChaseMovement` | 16 | Richtungslogik und Bewegung trennen |
+| `classes/throwable-object.class.js:54` | `throw` | 23 | `startFlight()`, `startSplashCheck()`, `startRotationAnimation()` auslagern |
+| `classes/throwable-object.class.js:79` | `startSplashAnimation` | 24 | Frame-Iteration und Cleanup trennen |
+| `classes/sound-manager.class.js:17` | `constructor` | 20 | Sound-Definitionen in Konstante oder `initSounds()` auslagern |
+| `classes/status-bar.class.js:96` | `resolveImageIndex` | 15 | Über if/else-if-Kette → evtl. kompakter via `Math.min(Math.floor(percentage / 20), 5)` |
 
 ---
 
 ## Issue 9: Inaktivitäts-Timer für Sleep-/Long-Idle (character.class.js:218)
 
-- **Betroffen:** `character.class.js` — `playIdleAnimation()` / `playIdleAnimationOnce()`
+- **Betroffen:** `classes/moveable-object/character.class.js` — `playIdleAnimation()` / `playIdleAnimationOnce()`
 - **Problem:** Kein expliziter Timer; Long-Idle startet nach der Idle-Sequenz, nicht nach einer festen Inaktivitätsdauer
 - **Lösung:**
   - `lastActivityTime`-Property in Character einführen
@@ -137,7 +138,7 @@ Alle betroffenen Funktionen und deren Aufteilung:
 - **Betroffen:**
   - `js/game.js:222` — keydown-Callback undokumentiert
   - `js/game.js:251` — keyup-Callback undokumentiert
-  - `models/world-collisions.class.js:8` — kein Constructor-JSDoc
+  - `classes/world-collisions.class.js:8` — kein Constructor-JSDoc
   - Allgemein: Events, Callbacks und Event-Handler
 - **Lösung:** JSDoc-Blöcke für alle öffentlichen Methoden, Event-Handler und Constructor nachtragen
 - **Check:** Keine undokumentierten öffentlichen Methoden mehr
