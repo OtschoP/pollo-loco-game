@@ -56,3 +56,8 @@ Original prompt: kannst Du mir dabei helfen einen offset für die jeweiligen mov
 - `.game-stage` now keeps the 3:2 canvas ratio by deriving displayed width from available `100dvh` height; internal canvas dimensions remain 720x480.
 - In `max-height: 480px`, header/buttons/touch controls/start/end overlays are compacted so the full play area stays within the viewport.
 - Avoided CSS calc multiplication by using equivalent `calc(150dvh - ...)` formulas for browser compatibility.
+
+2026-07-14
+- Review Issue 2 documented: no `templates/` folder is created because the project currently has no dynamically generated HTML templates.
+- Static UI fragments such as dialogs, endscreen, start button, and mobile controls intentionally remain in `index.html`.
+- A `templates/` folder should only be added when reusable HTML fragments or actual template files are introduced.

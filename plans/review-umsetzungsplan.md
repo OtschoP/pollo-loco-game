@@ -16,6 +16,7 @@ Basierend auf `review.md` — Mängel gezielt beheben.
 
 ## Issue 2: Projektstruktur — `templates`-Ordner fehlt
 
+- **Status:** Erledigt — dokumentiert in `progress.md`; kein leerer `templates/`-Ordner, weil aktuell keine dynamischen Templates existieren.
 - **Betroffen:** Kein `templates/`-Ordner vorhanden
 - **Bewertung:** Aktuell gibt es keine Templates im Code. Dialoge, Endscreen, Startbutton und Mobile-Controls sind statisch in `index.html` geschrieben.
 - **Lösung:** Keinen künstlichen `templates/`-Ordner anlegen. Stattdessen im Review/README begründen: "Es gibt keine dynamisch generierten HTML-Templates; statischer HTML-Code liegt bewusst in `index.html`."
@@ -26,6 +27,7 @@ Basierend auf `review.md` — Mängel gezielt beheben.
 
 ## Issue 3: `style.css` — über 400 LOC (465 Zeilen)
 
+- **Status:** Erledigt — Basis-Styles bleiben in `style.css`; Media Queries, Mobile-, Touch- und Portrait-Regeln liegen in `style-responsive.css`.
 - **Betroffen:** `style.css` (465 Zeilen)
 - **Lösung:** CSS auf mehrere Dateien aufteilen:
   - `style.css` → Basis-Styles (< 400 Zeilen)
