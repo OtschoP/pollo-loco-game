@@ -1,6 +1,6 @@
 @font-face {
     font-family: 'zabars';
-    src: url('/fonts/zabars.ttf') format('truetype');
+    src: url('./fonts/zabars.ttf') format('truetype');
 }
 
 html {

@@ -39,6 +39,7 @@ Basierend auf `review.md` — Mängel gezielt beheben.
 
 ## Issue 4: `style.css:3` — Absoluter Font-Pfad
 
+- **Status:** Erledigt — Font-Pfad auf `url('./fonts/zabars.ttf')` geändert.
 - **Betroffen:** `style.css` Zeile 3: `url(/fonts/zabars.ttf)`
 - **Lösung:** Ändern zu `url(./fonts/zabars.ttf)` oder `url('../fonts/zabars.ttf')`
 - **Aufwand:** Minimal (1 Zeile)
