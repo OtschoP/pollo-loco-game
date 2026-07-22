@@ -65,11 +65,12 @@ Basierend auf `review.md` — Mängel gezielt beheben.
 
 ### 6a: `camera_x` in `world.class.js:19`
 
+- **Status:** Erledigt — `camera_x` wurde in `cameraX` umbenannt und alle Code-Referenzen wurden angepasst.
 - **Betroffen:** `classes/world.class.js` Zeile 19: `camera_x`
 - **Lösung:** Umbenennen zu `cameraX` — alle Referenzen anpassen:
   - `world.class.js` interne Nutzung
-  - `world-renderer.class.js` (Zugriff auf `world.camera_x`)
-  - `character.class.js` (Zugriff auf `world.camera_x`)
+  - `world-renderer.class.js` (Zugriff auf `world.cameraX`)
+  - `character.class.js` (Zugriff auf `world.cameraX`)
 - **Aufwand:** Mittel — 3 Dateien, Suchen/Ersetzen
 
 ### 6b: `level_end_x` in `level.class.js:18`

@@ -62,6 +62,11 @@ Original prompt: kannst Du mir dabei helfen einen offset für die jeweiligen mov
 - Static UI fragments such as dialogs, endscreen, start button, and mobile controls intentionally remain in `index.html`.
 - A `templates/` folder should only be added when reusable HTML fragments or actual template files are introduced.
 
+2026-07-22
+- Review Issue 6a implemented: renamed `camera_x` to `cameraX` in `World`, `WorldRenderer`, and `Character`.
+- Validation status: `node --check` passed for `classes/world.class.js`, `classes/world-renderer.class.js`, and `classes/moveable-object/character.class.js`.
+- Playwright validation was attempted via the develop-web-game client, but the environment is missing the `playwright` package.
+
 2026-07-21
 - Review Issue 5 implemented: mobile controls default to `display: none` and no longer rely on `!important`.
 - `init()` marks coarse touch devices with `.is-touch-device`; `startGame()` adds `.game-started` and reveals the controls, while `backToHome()` removes the state class and restores `[hidden]`.

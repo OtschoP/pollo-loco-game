@@ -122,7 +122,7 @@ class Character extends MoveableObject {
         this.handleJump();
         this.handleLandingSound();
 
-        this.world.camera_x = -this.x + 100;
+        this.world.cameraX = -this.x + 100;
     }
 
     /** Processes left/right keyboard input and updates facing direction. */

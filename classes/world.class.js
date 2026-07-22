@@ -16,7 +16,7 @@ class World {
     /** Shared sound manager. */
     soundManager;
     /** Camera x-offset for scrolling. */
-    camera_x = 0;
+    cameraX = 0;
     /** Health status bar. */
     statusBar = new StatusBar('health', 50, 0, this.character.energy);
     /** Coin status bar. */
@@ -145,7 +145,7 @@ class World {
         this.initLevelState();
         this.isGameOver = false;
         this.isGameWon = false;
-        this.camera_x = 0;
+        this.cameraX = 0;
         this.previousCharacterBottom = null;
         this.throwKeyPressed = false;
         this.canTakeDamage = true;

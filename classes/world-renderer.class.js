@@ -39,7 +39,7 @@ class WorldRenderer {
     /** Draws all camera-scrolled world layers (background, clouds, items, enemies, bottles). */
     drawScrollableWorld() {
         this.ctx.save();
-        this.ctx.translate(this.world.camera_x, 0);
+        this.ctx.translate(this.world.cameraX, 0);
         this.addObjectsToMap(this.world.level.backgroundObjects);
         this.addObjectsToMap(this.world.level.clouds);
         this.addObjectsToMap(this.world.level.coins);
@@ -67,7 +67,7 @@ class WorldRenderer {
         }
 
         this.ctx.save();
-        this.ctx.translate(this.world.camera_x, 0);
+        this.ctx.translate(this.world.cameraX, 0);
         this.addObjectsToMap(endbosses);
         this.ctx.restore();
     }
@@ -79,7 +79,7 @@ class WorldRenderer {
         }
 
         this.ctx.save();
-        this.ctx.translate(this.world.camera_x, 0);
+        this.ctx.translate(this.world.cameraX, 0);
         this.addToMap(this.world.character);
         this.ctx.restore();
     }
