@@ -15,7 +15,7 @@ class Level {
     /** Array of collectible bottle instances. */
     bottles;
     /** Rightmost x-coordinate of the level (world boundary). */
-    level_end_x = 719 * 3;
+    levelEndX = 719 * 3;
 
     /**
      * Creates a new Level.

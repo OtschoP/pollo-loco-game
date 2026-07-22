@@ -75,11 +75,12 @@ Basierend auf `review.md` — Mängel gezielt beheben.
 
 ### 6b: `level_end_x` in `level.class.js:18`
 
+- **Status:** Erledigt — `level_end_x` wurde in `levelEndX` umbenannt und alle Code-Referenzen wurden angepasst.
 - **Betroffen:** `classes/level.class.js` Zeile 18: `level_end_x`
 - **Lösung:** Umbenennen zu `levelEndX` — alle Referenzen anpassen:
   - `level.class.js` (Setter/Getter)
-  - `world.class.js` (Zugriff auf `this.level.level_end_x`)
-  - `character.class.js` (Zugriff `this.world.level.level_end_x`)
+  - `world.class.js` (kein Zugriff vorhanden)
+  - `character.class.js` (Zugriff `this.world.level.levelEndX`)
   - `endboss.class.js` (ggf. Zugriff)
   - `moveable-object.class.js` (ggf. Zugriff)
 - **Aufwand:** Mittel — Suchen/Ersetzen über mehrere Dateien

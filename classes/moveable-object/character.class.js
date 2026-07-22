@@ -127,7 +127,7 @@ class Character extends MoveableObject {
 
     /** Processes left/right keyboard input and updates facing direction. */
     handleHorizontalMovement() {
-        if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
+        if (this.world.keyboard.RIGHT && this.x < this.world.level.levelEndX) {
             this.moveRight();
             this.otherDirection = false;
             return;

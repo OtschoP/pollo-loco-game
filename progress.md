@@ -66,6 +66,8 @@ Original prompt: kannst Du mir dabei helfen einen offset für die jeweiligen mov
 - Review Issue 6a implemented: renamed `camera_x` to `cameraX` in `World`, `WorldRenderer`, and `Character`.
 - Validation status: `node --check` passed for `classes/world.class.js`, `classes/world-renderer.class.js`, and `classes/moveable-object/character.class.js`.
 - Playwright validation was attempted via the develop-web-game client, but the environment is missing the `playwright` package.
+- Review Issue 6b implemented: renamed `level_end_x` to `levelEndX` in `Level` and `Character`.
+- Validation status: `node --check` passed for `classes/level.class.js` and `classes/moveable-object/character.class.js`.
 
 2026-07-21
 - Review Issue 5 implemented: mobile controls default to `display: none` and no longer rely on `!important`.
