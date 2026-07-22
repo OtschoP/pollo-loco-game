@@ -109,14 +109,6 @@ class MoveableObject extends DrawableObject {
         return timepassed < 0.3;
     }
 
-    /**
-     * Returns whether the object has zero energy.
-     * @returns {boolean} `true` if dead.
-     */
-    isDead(){
-        return this.energy == 0;
-    }
-
     /** Moves the object right by its speed. */
     moveRight() {
         this.x += this.speed;

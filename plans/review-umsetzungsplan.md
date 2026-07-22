@@ -89,6 +89,7 @@ Basierend auf `review.md` — Mängel gezielt beheben.
 
 ## Issue 7: Doppeltes `isDead()` in `moveable-object.class.js`
 
+- **Status:** Erledigt — die erste `isDead()`-Definition mit `energy == 0` wurde entfernt; die robustere `energy <= 0`-Variante bleibt bestehen.
 - **Betroffen:** `classes/moveable-object/moveable-object.class.js`
   - Zeile 116: `isDead() { return this.energy == 0; }`
   - Zeile 139: `isDead() { return this.energy <= 0; }`
