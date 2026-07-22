@@ -61,3 +61,10 @@ Original prompt: kannst Du mir dabei helfen einen offset für die jeweiligen mov
 - Review Issue 2 documented: no `templates/` folder is created because the project currently has no dynamically generated HTML templates.
 - Static UI fragments such as dialogs, endscreen, start button, and mobile controls intentionally remain in `index.html`.
 - A `templates/` folder should only be added when reusable HTML fragments or actual template files are introduced.
+
+2026-07-21
+- Review Issue 5 implemented: mobile controls default to `display: none` and no longer rely on `!important`.
+- `init()` marks coarse touch devices with `.is-touch-device`; `startGame()` adds `.game-started` and reveals the controls, while `backToHome()` removes the state class and restores `[hidden]`.
+- The touch media query now shows controls only through `.is-touch-device.game-started .mobile-controls:not([hidden])`.
+- Validation: `node --check js/game.js`, `git diff --check`, selector checks, and an isolated DOM state-flow test for touch detection, game start, and return to home passed.
+- Visual Playwright validation could not run because the skill's `playwright` package is missing and installation approval was declined.

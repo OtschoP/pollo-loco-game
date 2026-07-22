@@ -48,6 +48,7 @@ Basierend auf `review.md` — Mängel gezielt beheben.
 
 ## Issue 5: `style.css:454` — Fragiles `display: flex !important` für Mobile Controls
 
+- **Status:** Erledigt — Touch- und Spielzustand steuern die Controls über `.is-touch-device.game-started`; `[hidden]` bleibt wirksam und `!important` entfällt.
 - **Betroffen:** `@media (hover: none) and (pointer: coarse)` → `.mobile-controls { display: flex !important; }`
 - **Lösung:** Statt `!important` mit gezielter Steuerung via CSS-Klassen und Spielzustand arbeiten:
   - Controls standardmäßig `display: none`

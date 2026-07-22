@@ -107,8 +107,8 @@
 
 /* Touch-Geräte: Mobile-Steuerung anzeigen */
 @media (hover: none) and (pointer: coarse) {
-    #mobile-controls {
-        display: flex !important;
+    .is-touch-device.game-started .mobile-controls:not([hidden]) {
+        display: flex;
     }
 }
 

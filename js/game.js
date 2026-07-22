@@ -19,6 +19,7 @@ function init() {
     canvas = document.getElementById('canvas');
     soundManager = new SoundManager();
     startScreenImage.src = 'img/9_intro_outro_screens/start/startscreen_1.png';
+    setTouchDeviceClass();
 
     if (startScreenImage.complete) {
         drawStartScreen();
@@ -50,6 +51,8 @@ function startGame() {
     }
 
     hasGameStarted = true;
+    document.body.classList.add('game-started');
+    document.getElementById('mobile-controls').hidden = false;
     hideStartButton();
     world = new World(canvas, keyboard, soundManager);
     startEndscreenWatcher();
@@ -85,8 +88,16 @@ function backToHome() {
     }
     soundManager.stopAll();
     hasGameStarted = false;
+    document.body.classList.remove('game-started');
+    document.getElementById('mobile-controls').hidden = true;
     showStartButton();
     drawStartScreen();
+}
+
+/** Marks the page when the primary input device supports coarse touch input. */
+function setTouchDeviceClass() {
+    const isTouchDevice = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+    document.body.classList.toggle('is-touch-device', isTouchDevice);
 }
 
 /** Starts a polling interval that shows the endscreen when the game ends. */
