@@ -80,38 +80,39 @@ class Endboss extends MoveableObject {
 
     /** Starts activation/movement (60 fps) and animation-state (120 ms) intervals. */
     animate() {
-        this._registerInterval(() => {
-            this.updateActivation();
-            this.updateChaseMovement();
-        }, 1000 / 60);
+        this._registerInterval(() => this.handleMovement(), 1000 / 60);
+        this._registerInterval(() => this.handleAnimationState(), 120);
+    }
 
-        this._registerInterval(() => {
-            if (this.world?.isGameOver) {
-                return;
-            }
+    /** Updates boss activation and chase movement. */
+    handleMovement() {
+        this.updateActivation();
+        this.updateChaseMovement();
+    }
 
-            if (this.isDead()) {
-                this.playAnimation(this.IMAGES_DEAD);
-                return;
-            }
+    /** Selects the correct boss animation for the current state. */
+    handleAnimationState() {
+        if (this.world?.isGameOver) {
+            return;
+        }
+        if (this.isDead()) {
+            this.playAnimation(this.IMAGES_DEAD);
+        } else if (this.isHurt()) {
+            this.playAnimation(this.IMAGES_HURT);
+        } else {
+            this.handleActiveAnimationState();
+        }
+    }
 
-            if (this.isHurt()) {
-                this.playAnimation(this.IMAGES_HURT);
-                return;
-            }
-
-            if (this.isAttacking) {
-                this.playAttackAnimationOnce();
-                return;
-            }
-
-            if (this.isActivated) {
-                this.playAnimation(this.IMAGES_ALERT);
-                return;
-            }
-
+    /** Selects non-death/non-hurt boss animations. */
+    handleActiveAnimationState() {
+        if (this.isAttacking) {
+            this.playAttackAnimationOnce();
+        } else if (this.isActivated) {
+            this.playAnimation(this.IMAGES_ALERT);
+        } else {
             this.playAnimation(this.IMAGES_WALKING);
-        }, 120);
+        }
     }
 
     /** Takes a bottle hit, activates the endboss if not already active. */
@@ -185,13 +186,16 @@ class Endboss extends MoveableObject {
         if (!this.isActivated || !this.world || this.world.isGameOver || this.isDead() || this.isMovementLocked()) {
             return;
         }
+        this.moveTowardCharacter();
+    }
 
+    /** Moves horizontally toward the character. */
+    moveTowardCharacter() {
         if (this.world.character.x < this.x) {
             this.moveLeft();
             this.otherDirection = false;
             return;
         }
-
         if (this.world.character.x > this.x) {
             this.moveRight();
             this.otherDirection = true;

@@ -100,6 +100,8 @@ Basierend auf `review.md` — Mängel gezielt beheben.
 
 ## Issue 8: Funktionen über 14 Zeilen — Refactoring
 
+**Status:** Erledigt — die betroffenen langen Funktionen wurden in kleinere Vanilla-JS-Hilfsfunktionen zerlegt; die bestehende Skriptstruktur ohne Module/Bundler bleibt erhalten.
+
 Alle betroffenen Funktionen und deren Aufteilung:
 
 | Datei | Funktion | Zeilen | Vorschlag zur Aufteilung |

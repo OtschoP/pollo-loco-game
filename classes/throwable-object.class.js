@@ -55,19 +55,32 @@ class ThrowableObject extends MoveableObject {
         this.speedY = 20;
         this.speedX = 10;
         this.applyGravity();
+        this.startFlight();
+        this.startSplashCheck();
+        this.startRotationAnimation();
+    }
+
+    /** Starts horizontal bottle flight. */
+    startFlight() {
         this.throwInterval = this._registerInterval(() => {
             if (this.hasSplashed) {
                 return;
             }
             this.x += this.otherDirection ? -this.speedX : this.speedX;
         }, 25);
+    }
 
+    /** Starts checking for ground contact. */
+    startSplashCheck() {
         this.splashCheckInterval = this._registerInterval(() => {
             if (!this.hasSplashed && !this.isAboveGround()) {
                 this.startSplashAnimation();
             }
         }, 40);
+    }
 
+    /** Starts bottle rotation during flight. */
+    startRotationAnimation() {
         this.rotationAnimationInterval = this._registerInterval(() => {
             if (!this.hasSplashed) {
                 this.playAnimation(this.IMAGES_ROTATION);
@@ -80,7 +93,15 @@ class ThrowableObject extends MoveableObject {
         if (this.hasSplashed) {
             return;
         }
+        this.prepareSplashAnimation();
+        let splashFrame = 0;
+        this.splashAnimationInterval = this._registerInterval(() => {
+            splashFrame = this.playSplashFrame(splashFrame);
+        }, 80);
+    }
 
+    /** Stops flight and positions the bottle for splash frames. */
+    prepareSplashAnimation() {
         this.hasSplashed = true;
         this.soundManager?.play('bottleSplash');
         this.y = 360;
@@ -88,16 +109,21 @@ class ThrowableObject extends MoveableObject {
         clearInterval(this.throwInterval);
         clearInterval(this.splashCheckInterval);
         clearInterval(this.rotationAnimationInterval);
+    }
 
-        let splashFrame = 0;
-        this.splashAnimationInterval = this._registerInterval(() => {
-            this.img = this.imageCache[this.IMAGES_SPLASH[splashFrame]];
-            splashFrame++;
+    /** Plays one splash frame and returns the next frame index. */
+    playSplashFrame(splashFrame) {
+        this.img = this.imageCache[this.IMAGES_SPLASH[splashFrame]];
+        const nextFrame = splashFrame + 1;
+        if (nextFrame >= this.IMAGES_SPLASH.length) {
+            this.finishSplashAnimation();
+        }
+        return nextFrame;
+    }
 
-            if (splashFrame >= this.IMAGES_SPLASH.length) {
-                clearInterval(this.splashAnimationInterval);
-                this.isMarkedForRemoval = true;
-            }
-        }, 80);
+    /** Cleans up after the splash animation. */
+    finishSplashAnimation() {
+        clearInterval(this.splashAnimationInterval);
+        this.isMarkedForRemoval = true;
     }
 }

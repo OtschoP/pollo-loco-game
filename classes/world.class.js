@@ -65,19 +65,34 @@ class World {
      * @param {SoundManager} soundManager - Shared audio controller.
      */
     constructor(canvas, keyboard, soundManager) {
+        this.initCanvas(canvas);
+        this.initRenderer();
+        this.initGame(keyboard, soundManager);
+    }
+
+    /** Stores canvas and rendering context references. */
+    initCanvas(canvas) {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
+    }
+
+    /** Creates renderer and collision helpers. */
+    initRenderer() {
+        this.renderer = new WorldRenderer(this);
+        this.collisions = new WorldCollisions(this);
+    }
+
+    /** Stores dependencies, loads state, and starts loops. */
+    initGame(keyboard, soundManager) {
         this.keyboard = keyboard;
         this.soundManager = soundManager;
         this.gameOverImage.src = 'img/9_intro_outro_screens/game_over/game over.png';
         this.winImage.src = 'img/You won, you lost/You Win A.png';
-        this.renderer = new WorldRenderer(this);
-        this.collisions = new WorldCollisions(this);
         this.initLevelState();
         this.setWorld();
         this.draw();
         this.soundManager.playLoop('music');
-        this.run()
+        this.run();
     }
 
     /** (Re)initialises the level, status bars, and collection counters. */
@@ -140,9 +155,23 @@ class World {
         this.stop();
         this.stopAllActors();
         this.soundManager.stopAll();
+        this.resetActors();
+        this.resetGameState();
+        this.setWorld();
+        this.draw();
+        this.soundManager.playLoop('music');
+        this.run();
+    }
+
+    /** Recreates the player and level-owned objects. */
+    resetActors() {
         this.throwableObjects = [];
         this.character = new Character();
         this.initLevelState();
+    }
+
+    /** Restores game flags and input state for a fresh run. */
+    resetGameState() {
         this.isGameOver = false;
         this.isGameWon = false;
         this.cameraX = 0;
@@ -150,33 +179,35 @@ class World {
         this.throwKeyPressed = false;
         this.canTakeDamage = true;
         this.resetPressedKeys();
-        this.setWorld();
-        this.draw();
-        this.soundManager.playLoop('music');
-        this.run();
     }
 
     /** Spawns a new throwable bottle when the throw key is pressed and bottles are available. */
     checkThrowableObjects(){
-        if (this.isGameOver || this.isGameWon || this.character.isRemovedFromWorld) {
-            return;
+        if (this.canThrow()) {
+            this.spawnBottle();
         }
-
-        if (this.keyboard.D && !this.throwKeyPressed && this.collectedBottles > 0) {
-            let xOffset = this.character.otherDirection ? 0 : 50;
-            let bottle = new ThrowableObject(
-                this.character.x + xOffset,
-                this.character.y + 100,
-                this.character.otherDirection,
-                this.soundManager
-            );
-            this.throwableObjects.push(bottle);
-            this.collectedBottles--;
-            this.updateBottleStatusBar();
-            this.soundManager.play('bottleThrow');
-        }
-
         this.throwKeyPressed = this.keyboard.D;
+    }
+
+    /** Returns whether a new throwable bottle should be spawned this tick. */
+    canThrow() {
+        return !this.isGameOver && !this.isGameWon && !this.character.isRemovedFromWorld &&
+            this.keyboard.D && !this.throwKeyPressed && this.collectedBottles > 0;
+    }
+
+    /** Creates a throwable bottle and updates inventory/UI state. */
+    spawnBottle() {
+        const xOffset = this.character.otherDirection ? 0 : 50;
+        const bottle = new ThrowableObject(
+            this.character.x + xOffset,
+            this.character.y + 100,
+            this.character.otherDirection,
+            this.soundManager
+        );
+        this.throwableObjects.push(bottle);
+        this.collectedBottles--;
+        this.updateBottleStatusBar();
+        this.soundManager.play('bottleThrow');
     }
 
     /** Sets the game-over flag and resets pressed keys when the character dies. */
@@ -193,19 +224,25 @@ class World {
 
     /** Sets the game-won flag and resets pressed keys when all endbosses are dead. */
     checkGameWon() {
-        if (this.isGameWon) {
-            return;
+        if (!this.isGameWon && this.areAllEndbossesDead()) {
+            this.finishGameWon();
         }
+    }
 
+    /** Returns whether every endboss in the level has died. */
+    areAllEndbossesDead() {
         const endbosses = this.getEndbosses();
-        if (endbosses.length > 0 && endbosses.every((endboss) => endboss.isDead())) {
-            this.isGameWon = true;
-            this.resetPressedKeys();
-            this.soundManager.stop('music');
-            this.soundManager.stop('snore');
-            this.soundManager.stop('footsteps');
-            this.soundManager.play('youWin');
-        }
+        return endbosses.length > 0 && endbosses.every((endboss) => endboss.isDead());
+    }
+
+    /** Applies win state side effects. */
+    finishGameWon() {
+        this.isGameWon = true;
+        this.resetPressedKeys();
+        this.soundManager.stop('music');
+        this.soundManager.stop('snore');
+        this.soundManager.stop('footsteps');
+        this.soundManager.play('youWin');
     }
 
     /** Resets all keyboard flags to false. */

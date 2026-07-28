@@ -199,23 +199,22 @@ function updateMuteButton() {
 
 /** Wires all mobile touch buttons to set keyboard flags via touchstart/touchend. */
 function wireTouchControls() {
-    document.querySelectorAll('.touch-button').forEach((button) => {
-        const key = button.dataset.key;
+    document.querySelectorAll('.touch-button').forEach(setupTouchButton);
+}
 
-        button.addEventListener('touchstart', (event) => {
-            event.preventDefault();
-            setKey(key, true);
-        }, { passive: false });
+/** Wires one touch button to its keyboard flag. */
+function setupTouchButton(button) {
+    const key = button.dataset.key;
+    button.addEventListener('touchstart', (event) => handleTouchKey(event, key, true), { passive: false });
+    button.addEventListener('touchend', (event) => handleTouchKey(event, key, false));
+    button.addEventListener('touchcancel', () => setKey(key, false));
+    button.addEventListener('contextmenu', (event) => event.preventDefault());
+}
 
-        button.addEventListener('touchend', (event) => {
-            event.preventDefault();
-            setKey(key, false);
-        });
-
-        button.addEventListener('touchcancel', () => setKey(key, false));
-
-        button.addEventListener('contextmenu', (event) => event.preventDefault());
-    });
+/** Prevents browser touch behavior and updates a keyboard flag. */
+function handleTouchKey(event, key, value) {
+    event.preventDefault();
+    setKey(key, value);
 }
 
 /**
@@ -230,60 +229,30 @@ function setKey(key, value) {
     keyboard[key] = value;
 }
 
-window.addEventListener("keydown", (e) => {
-    if (!world) {
+const KEY_MAP = {
+    37: 'LEFT',
+    38: 'UP',
+    39: 'RIGHT',
+    40: 'DOWN',
+    32: 'SPACE',
+    68: 'D'
+};
+
+/** Returns whether keyboard input should currently affect the game. */
+function canHandleKeyboardInput() {
+    return world && !world.isGameOver && !world.isGameWon;
+}
+
+/** Updates a mapped keyboard flag for a key event. */
+function handleKeyboardEvent(event, value) {
+    if (!canHandleKeyboardInput()) {
         return;
     }
+    const key = KEY_MAP[event.keyCode];
+    if (key) {
+        setKey(key, value);
+    }
+}
 
-    if (world && (world.isGameOver || world.isGameWon)) {
-        return;
-    }
-
-    if(e.keyCode == 39) {
-        keyboard.RIGHT = true;
-    }
-    if(e.keyCode == 37) {
-        keyboard.LEFT = true;
-    }
-    if(e.keyCode == 40) {
-        keyboard.DOWN = true;
-    }
-    if(e.keyCode == 38) {
-        keyboard.UP = true;
-    }
-    if(e.keyCode == 32) {
-        keyboard.SPACE = true;
-    }
-    if(e.keyCode == 68) {
-        keyboard.D = true;
-    }
-});
-
-window.addEventListener("keyup", (e) => {
-    if (!world) {
-        return;
-    }
-
-    if (world && (world.isGameOver || world.isGameWon)) {
-        return;
-    }
-
-    if(e.keyCode == 39) {
-        keyboard.RIGHT = false;
-    }
-    if(e.keyCode == 37) {
-        keyboard.LEFT = false;
-    }
-    if(e.keyCode == 40) {
-        keyboard.DOWN = false;
-    }
-    if(e.keyCode == 38) {
-        keyboard.UP = false;
-    }
-    if(e.keyCode == 32) {
-        keyboard.SPACE = false;
-    }
-    if(e.keyCode == 68) {
-        keyboard.D = false;
-    }
-});
+window.addEventListener("keydown", (event) => handleKeyboardEvent(event, true));
+window.addEventListener("keyup", (event) => handleKeyboardEvent(event, false));

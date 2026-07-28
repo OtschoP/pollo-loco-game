@@ -41,23 +41,34 @@ class WorldCollisions {
         const w = this.world;
         const enemyCanDamage = enemy.isDefeated !== true && !enemy.isDead();
         const isCharacterCollision = characterCanInteract && enemyCanDamage && w.character.isColliding(enemy);
-
         if (!isCharacterCollision) {
             return;
         }
+        this.handleEndbossAttack(enemy);
+        this.handleStompOrDamage(enemy, characterHitbox, previousCharacterBottom);
+    }
 
+    /** Starts an endboss attack on contact. */
+    handleEndbossAttack(enemy) {
         if (enemy instanceof Endboss) {
             enemy.startAttack();
         }
+    }
 
+    /** Handles stomp damage priority before regular character damage. */
+    handleStompOrDamage(enemy, characterHitbox, previousCharacterBottom) {
         if (this.isStompCollision(enemy, characterHitbox, previousCharacterBottom)) {
-            enemy.die();
-            w.soundManager.play('chickenDeath');
-            this.bounceAfterStomp();
+            this.handleStomp(enemy);
             return;
         }
-
         this.handleCharacterDamage();
+    }
+
+    /** Defeats a stomped enemy and bounces the character. */
+    handleStomp(enemy) {
+        enemy.die();
+        this.world.soundManager.play('chickenDeath');
+        this.bounceAfterStomp();
     }
 
     /** Applies damage to the character and starts the damage cooldown. */

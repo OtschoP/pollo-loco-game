@@ -20,6 +20,50 @@ function createSmallChickens() {
     });
 }
 
+/** Creates the level's cloud layer. */
+function createClouds() {
+    return [
+        new Cloud(-250, 20, 0.1),
+        new Cloud(460, 35, 0.14),
+        new Cloud(1140, 25, 0.13),
+        new Cloud(1820, 30, 0.1),
+        new Cloud(2500, 40, 0.09)
+    ];
+}
+
+/** Creates all scrolling background layers. */
+function createBackgroundObjects() {
+    return [-719, 0, 719, 719 * 2, 719 * 3].flatMap((x, index) => createBackgroundSet(x, index));
+}
+
+/** Creates one parallax background set at the given x-position. */
+function createBackgroundSet(x, index) {
+    const side = index % 2 === 0 ? '2' : '1';
+    return [
+        new BackgroundObject('img/5_background/layers/air.png', x),
+        new BackgroundObject(`img/5_background/layers/3_third_layer/${side}.png`, x),
+        new BackgroundObject(`img/5_background/layers/2_second_layer/${side}.png`, x),
+        new BackgroundObject(`img/5_background/layers/1_first_layer/${side}.png`, x)
+    ];
+}
+
+/** Creates all collectible coins. */
+function createCoins() {
+    return [
+        new Coin(320, 220, 0),
+        new Coin(760, 180, 1),
+        new Coin(1180, 220, 0),
+        new Coin(1620, 180, 1),
+        new Coin(2060, 220, 0)
+    ];
+}
+
+/** Creates all collectible bottles. */
+function createBottles() {
+    const positions = [300, 430, 560, 720, 860, 1010, 1160, 1310, 1460, 1610, 1760, 1910, 2020, 2085, 2140];
+    return positions.map((x, index) => new Bottle(x, 340, index % 2));
+}
+
 /**
  * Factory that builds a fresh Level 1 instance with enemies, clouds,
  * background layers, coins, and bottles.
@@ -30,60 +74,5 @@ function createLevel1() {
         ...createChickens(),
         ...createSmallChickens(),
         new Endboss()
-    ],
-    [
-        new Cloud(-250, 20, 0.1),
-        new Cloud(460, 35, 0.14),
-        new Cloud(1140, 25, 0.13),
-        new Cloud(1820, 30, 0.1),
-        new Cloud(2500, 40, 0.09)
-    ],
-    [   
-        new BackgroundObject('img/5_background/layers/air.png', -719),
-        new BackgroundObject('img/5_background/layers/3_third_layer/2.png', -719),
-        new BackgroundObject('img/5_background/layers/2_second_layer/2.png', -719),
-        new BackgroundObject('img/5_background/layers/1_first_layer/2.png', -719),     
-        new BackgroundObject('img/5_background/layers/air.png', 0),
-        new BackgroundObject('img/5_background/layers/3_third_layer/1.png', 0),
-        new BackgroundObject('img/5_background/layers/2_second_layer/1.png', 0),
-        new BackgroundObject('img/5_background/layers/1_first_layer/1.png', 0), 
-        new BackgroundObject('img/5_background/layers/air.png', 719),
-        new BackgroundObject('img/5_background/layers/3_third_layer/2.png', 719),
-        new BackgroundObject('img/5_background/layers/2_second_layer/2.png', 719),
-        new BackgroundObject('img/5_background/layers/1_first_layer/2.png', 719),  
-        new BackgroundObject('img/5_background/layers/air.png', 719*2),
-        new BackgroundObject('img/5_background/layers/3_third_layer/1.png', 719*2),
-        new BackgroundObject('img/5_background/layers/2_second_layer/1.png', 719*2),
-        new BackgroundObject('img/5_background/layers/1_first_layer/1.png', 719*2), 
-        new BackgroundObject('img/5_background/layers/air.png', 719*3),
-        new BackgroundObject('img/5_background/layers/3_third_layer/2.png', 719*3),
-        new BackgroundObject('img/5_background/layers/2_second_layer/2.png', 719*3),
-        new BackgroundObject('img/5_background/layers/1_first_layer/2.png', 719*3),     
-    ],
-    [
-        new Coin(320, 220, 0),
-        new Coin(760, 180, 1),
-        new Coin(1180, 220, 0),
-        new Coin(1620, 180, 1),
-        new Coin(2060, 220, 0)
-    ],
-    [
-        new Bottle(300, 340, 0),
-        new Bottle(430, 340, 1),
-        new Bottle(560, 340, 0),
-        new Bottle(720, 340, 1),
-        new Bottle(860, 340, 0),
-        new Bottle(1010, 340, 1),
-        new Bottle(1160, 340, 0),
-        new Bottle(1310, 340, 1),
-        new Bottle(1460, 340, 0),
-        new Bottle(1610, 340, 1),
-        new Bottle(1760, 340, 0),
-        new Bottle(1910, 340, 1),
-        new Bottle(2020, 340, 0),
-        new Bottle(2085, 340, 1),
-        new Bottle(2140, 340, 0)
-    ]
-);
+    ], createClouds(), createBackgroundObjects(), createCoins(), createBottles());
 }
-

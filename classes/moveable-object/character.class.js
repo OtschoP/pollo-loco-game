@@ -163,30 +163,41 @@ class Character extends MoveableObject {
         if (!this.world || this.isRemovedFromWorld) {
             return;
         }
-
         if (this.isDead()) {
-            this.markActivity();
-            this.world.soundManager.stop('footsteps');
-            this.playDeathAnimationOnce();
+            this.handleDeadState();
             return;
         }
-
         if (this.isHurt()) {
-            this.markActivity();
-            this.world.soundManager.stop('footsteps');
-            this.playCharacterHitSoundOnce();
-            this.playAnimation(this.IMAGES_HURT);
+            this.handleHurtState();
             return;
         }
-
         if (this.isAboveGround()) {
-            this.markActivity();
-            this.world.soundManager.stop('footsteps');
-            this.playAnimation(this.IMAGES_JUMPING);
+            this.handleAirborneState();
             return;
         }
-
         this.handleGroundAnimation();
+    }
+
+    /** Handles death-state animation and sound cleanup. */
+    handleDeadState() {
+        this.markActivity();
+        this.world.soundManager.stop('footsteps');
+        this.playDeathAnimationOnce();
+    }
+
+    /** Handles hurt-state animation and hit sound. */
+    handleHurtState() {
+        this.markActivity();
+        this.world.soundManager.stop('footsteps');
+        this.playCharacterHitSoundOnce();
+        this.playAnimation(this.IMAGES_HURT);
+    }
+
+    /** Handles jump/fall animation and sound cleanup. */
+    handleAirborneState() {
+        this.markActivity();
+        this.world.soundManager.stop('footsteps');
+        this.playAnimation(this.IMAGES_JUMPING);
     }
 
     /** Plays walking or idle animation while the character is on the ground. */
@@ -228,20 +239,31 @@ class Character extends MoveableObject {
     /** Plays the idle intro (I-1 … I-10) a single time frame by frame. */
     playIdleAnimationOnce() {
         if (this.currentAnimation !== this.IMAGES_IDLE) {
-            this.currentAnimation = this.IMAGES_IDLE;
-            this.idleImageIndex = 0;
+            this.startIdleAnimation();
         }
+        this.showIdleFrame();
+        this.advanceIdleFrame();
+    }
 
+    /** Starts the short idle intro sequence. */
+    startIdleAnimation() {
+        this.currentAnimation = this.IMAGES_IDLE;
+        this.idleImageIndex = 0;
+    }
+
+    /** Shows the current idle frame. */
+    showIdleFrame() {
         const frameIndex = Math.min(this.idleImageIndex, this.IMAGES_IDLE.length - 1);
-        const framePath = this.IMAGES_IDLE[frameIndex];
-        this.img = this.imageCache[framePath];
+        this.img = this.imageCache[this.IMAGES_IDLE[frameIndex]];
+    }
 
-        if (this.idleImageIndex < this.IMAGES_IDLE.length - 1) {
-            this.idleImageIndex++;
+    /** Advances idle animation state or marks it finished. */
+    advanceIdleFrame() {
+        if (this.idleImageIndex >= this.IMAGES_IDLE.length - 1) {
+            this.idleAnimationFinished = true;
             return;
         }
-
-        this.idleAnimationFinished = true;
+        this.idleImageIndex++;
     }
 
     /** Resets the idle animation so the intro restarts on next standstill. */
@@ -261,21 +283,31 @@ class Character extends MoveableObject {
         if (this.deathAnimationFinished) {
             return;
         }
-
         if (!this.deathAnimationStarted) {
-            this.deathAnimationStarted = true;
-            this.currentImage = 0;
+            this.startDeathAnimation();
         }
-
-        const frameIndex = Math.min(this.currentImage, this.IMAGES_DEAD.length - 1);
-        const framePath = this.IMAGES_DEAD[frameIndex];
-        this.img = this.imageCache[framePath];
+        this.showDeathFrame();
         this.currentImage++;
-
         if (this.currentImage >= this.IMAGES_DEAD.length) {
-            this.deathAnimationFinished = true;
-            this.world.removeCharacterFromWorld();
+            this.finishDeathAnimation();
         }
     }
 
+    /** Starts the one-shot death animation from the first frame. */
+    startDeathAnimation() {
+        this.deathAnimationStarted = true;
+        this.currentImage = 0;
+    }
+
+    /** Shows the current death animation frame. */
+    showDeathFrame() {
+        const frameIndex = Math.min(this.currentImage, this.IMAGES_DEAD.length - 1);
+        this.img = this.imageCache[this.IMAGES_DEAD[frameIndex]];
+    }
+
+    /** Marks death animation complete and removes the character. */
+    finishDeathAnimation() {
+        this.deathAnimationFinished = true;
+        this.world.removeCharacterFromWorld();
+    }
 }
