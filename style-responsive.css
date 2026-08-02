@@ -105,9 +105,11 @@
     }
 }
 
-/* Touch-Geräte: Mobile-Steuerung anzeigen */
-@media (hover: none) and (pointer: coarse) {
-    .is-touch-device.game-started .mobile-controls:not([hidden]) {
+/* Mobile Steuerung auf Touch- und kleinen Spiel-Viewports anzeigen. */
+@media (hover: none) and (pointer: coarse),
+       (max-width: 900px),
+       (max-height: 520px) {
+    .game-started .mobile-controls:not([hidden]) {
         display: flex;
     }
 }

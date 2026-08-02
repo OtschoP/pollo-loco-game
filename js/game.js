@@ -94,9 +94,11 @@ function backToHome() {
     drawStartScreen();
 }
 
-/** Marks the page when the primary input device supports coarse touch input. */
+/** Marks the page when touch input is likely available. */
 function setTouchDeviceClass() {
-    const isTouchDevice = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+    const isTouchDevice = window.matchMedia('(hover: none) and (pointer: coarse)').matches ||
+        navigator.maxTouchPoints > 0 ||
+        'ontouchstart' in window;
     document.body.classList.toggle('is-touch-device', isTouchDevice);
 }
 
@@ -205,15 +207,21 @@ function wireTouchControls() {
 /** Wires one touch button to its keyboard flag. */
 function setupTouchButton(button) {
     const key = button.dataset.key;
-    button.addEventListener('touchstart', (event) => handleTouchKey(event, key, true), { passive: false });
-    button.addEventListener('touchend', (event) => handleTouchKey(event, key, false));
-    button.addEventListener('touchcancel', () => setKey(key, false));
+    button.addEventListener('pointerdown', (event) => handlePointerKey(event, key, true));
+    button.addEventListener('pointerup', (event) => handlePointerKey(event, key, false));
+    button.addEventListener('pointerleave', () => setKey(key, false));
+    button.addEventListener('pointercancel', () => setKey(key, false));
     button.addEventListener('contextmenu', (event) => event.preventDefault());
 }
 
 /** Prevents browser touch behavior and updates a keyboard flag. */
-function handleTouchKey(event, key, value) {
+function handlePointerKey(event, key, value) {
     event.preventDefault();
+    if (value) {
+        event.currentTarget.setPointerCapture?.(event.pointerId);
+    } else {
+        event.currentTarget.releasePointerCapture?.(event.pointerId);
+    }
     setKey(key, value);
 }
 
