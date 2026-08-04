@@ -205,6 +205,7 @@ class World {
             this.soundManager
         );
         this.throwableObjects.push(bottle);
+        this.character.markActivity();
         this.collectedBottles--;
         this.updateBottleStatusBar();
         this.soundManager.play('bottleThrow');

@@ -84,14 +84,14 @@ class Character extends MoveableObject {
     deathAnimationStarted = false;
     /** Whether the death animation has finished. */
     deathAnimationFinished = false;
-    /** Whether the idle intro animation has finished. */
-    idleAnimationFinished = false;
-    /** Current frame index within the idle animation. */
-    idleImageIndex = 0;
     /** Whether the character was airborne in the previous movement tick. */
     wasAboveGround = false;
     /** Timestamp of the hit that last played the character-hit sound. */
     lastCharacterHitSoundAt = 0;
+    /** Delay in milliseconds before the long-idle sleep animation starts. */
+    sleepDelayMs = 4000;
+    /** Timestamp of the last player activity relevant for sleeping. */
+    lastActivityAt = Date.now();
 
     /** Creates a new Character, preloads all images, and starts gravity + animation. */
     constructor() {
@@ -235,56 +235,35 @@ class Character extends MoveableObject {
         this.lastCharacterHitSoundAt = this.lastHit;
     }
 
-    /** Plays the idle intro once, then loops the long-idle animation. */
+    /** Plays regular idle until the sleep delay has elapsed. */
     playIdleAnimation() {
-        if (!this.idleAnimationFinished) {
-            this.playIdleAnimationOnce();
+        if (!this.canSleep()) {
+            this.playAwakeIdleAnimation();
             return;
         }
+        this.playSleepAnimation();
+    }
 
+    /** Returns whether enough inactivity time has passed to sleep. */
+    canSleep() {
+        return Date.now() - this.lastActivityAt >= this.sleepDelayMs;
+    }
+
+    /** Loops the regular idle animation while the character is awake. */
+    playAwakeIdleAnimation() {
+        this.world.soundManager.stop('snore');
+        this.playAnimation(this.IMAGES_IDLE);
+    }
+
+    /** Loops the long-idle sleep animation and snore sound. */
+    playSleepAnimation() {
         this.world.soundManager.playLoop('snore');
         this.playAnimation(this.IMAGES_LONG_IDLE);
     }
 
-    /** Plays the idle intro (I-1 … I-10) a single time frame by frame. */
-    playIdleAnimationOnce() {
-        if (this.currentAnimation !== this.IMAGES_IDLE) {
-            this.startIdleAnimation();
-        }
-        this.showIdleFrame();
-        this.advanceIdleFrame();
-    }
-
-    /** Starts the short idle intro sequence. */
-    startIdleAnimation() {
-        this.currentAnimation = this.IMAGES_IDLE;
-        this.idleImageIndex = 0;
-    }
-
-    /** Shows the current idle frame. */
-    showIdleFrame() {
-        const frameIndex = Math.min(this.idleImageIndex, this.IMAGES_IDLE.length - 1);
-        this.img = this.imageCache[this.IMAGES_IDLE[frameIndex]];
-    }
-
-    /** Advances idle animation state or marks it finished. */
-    advanceIdleFrame() {
-        if (this.idleImageIndex >= this.IMAGES_IDLE.length - 1) {
-            this.idleAnimationFinished = true;
-            return;
-        }
-        this.idleImageIndex++;
-    }
-
-    /** Resets the idle animation so the intro restarts on next standstill. */
-    resetIdleAnimation() {
-        this.idleAnimationFinished = false;
-        this.idleImageIndex = 0;
-    }
-
-    /** Marks activity (resets idle) – called on walk, jump, hurt, or death. */
+    /** Marks recent activity and stops sleep-related audio. */
     markActivity() {
-        this.resetIdleAnimation();
+        this.lastActivityAt = Date.now();
         this.world.soundManager.stop('snore');
     }
 
