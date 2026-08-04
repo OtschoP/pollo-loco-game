@@ -5,6 +5,10 @@
 class WorldCollisions {
     world;
 
+    /**
+     * Creates a collision helper bound to the given world.
+     * @param {World} world - World instance whose collisions are checked.
+     */
     constructor(world) {
         this.world = world;
     }

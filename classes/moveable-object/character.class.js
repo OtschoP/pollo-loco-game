@@ -163,10 +163,20 @@ class Character extends MoveableObject {
         if (!this.world || this.isRemovedFromWorld) {
             return;
         }
+        this.updateActiveAnimation();
+    }
+
+    /** Selects the active animation while the character is present in the world. */
+    updateActiveAnimation() {
         if (this.isDead()) {
             this.handleDeadState();
             return;
         }
+        this.updateLivingAnimation();
+    }
+
+    /** Selects the animation while the character is alive. */
+    updateLivingAnimation() {
         if (this.isHurt()) {
             this.handleHurtState();
             return;

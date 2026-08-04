@@ -18,17 +18,20 @@ let endscreenWatcherId = null;
 function init() {
     canvas = document.getElementById('canvas');
     soundManager = new SoundManager();
-    startScreenImage.src = 'img/9_intro_outro_screens/start/startscreen_1.png';
     setTouchDeviceClass();
-
-    if (startScreenImage.complete) {
-        drawStartScreen();
-    } else {
-        startScreenImage.onload = drawStartScreen;
-    }
-
+    initStartScreen();
     wireUi();
     wireTouchControls();
+}
+
+/** Loads the start screen image and draws it once it is ready. */
+function initStartScreen() {
+    startScreenImage.src = 'img/9_intro_outro_screens/start/startscreen_1.png';
+    if (startScreenImage.complete) {
+        drawStartScreen();
+        return;
+    }
+    startScreenImage.onload = drawStartScreen;
 }
 
 /** Draws the start screen image onto the canvas if the game hasn't started. */
