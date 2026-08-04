@@ -1,2 +1,10 @@
 .vscode/settings.json
 .kilo/
+
+# macOS system files
+.DS_Store
+
+# Local editor and environment files
+.env
+.env.local
+node_modules/
