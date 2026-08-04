@@ -62,7 +62,7 @@ class MoveableObject extends DrawableObject {
      * @returns {boolean} `true` if the object is airborne.
      */
     isAboveGround() {
-        if(this instanceof ThrowableObject){
+        if (this instanceof ThrowableObject) {
             return this.y < 360;
         } else {
             return this.y < 180;

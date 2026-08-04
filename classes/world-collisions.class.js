@@ -41,7 +41,7 @@ class WorldCollisions {
      * @param {Object} characterHitbox - Character hitbox edges.
      * @param {number} previousCharacterBottom - Character bottom y in the previous frame.
      */
-    handleEnemyCollision(enemy, characterCanInteract, characterHitbox, previousCharacterBottom){
+    handleEnemyCollision(enemy, characterCanInteract, characterHitbox, previousCharacterBottom) {
         const w = this.world;
         const enemyCanDamage = enemy.isDefeated !== true && !enemy.isDead();
         const isCharacterCollision = characterCanInteract && enemyCanDamage && w.character.isColliding(enemy);
@@ -111,7 +111,7 @@ class WorldCollisions {
      * @param {ThrowableObject} bottle - The bottle to check.
      * @returns {MoveableObject|undefined} The hit enemy, or undefined.
      */
-    findBottleHitEnemy(bottle){
+    findBottleHitEnemy(bottle) {
         return this.world.level.enemies.find((enemy) => {
             const isChickenType = enemy instanceof Chicken || enemy instanceof ChickenSmall;
             const isEndboss = enemy instanceof Endboss;
@@ -129,7 +129,7 @@ class WorldCollisions {
      * @param {ThrowableObject} bottle - The bottle that hit.
      * @param {MoveableObject} enemy - The enemy that was hit.
      */
-    applyBottleHit(bottle, enemy){
+    applyBottleHit(bottle, enemy) {
         const w = this.world;
         if (enemy instanceof Endboss) {
             enemy.takeBottleHit();
@@ -159,7 +159,7 @@ class WorldCollisions {
      * @param {string} type - 'coins' or 'bottles'.
      * @returns {MoveableObject[]} Remaining (uncollected) items.
      */
-    collectItems(items, type){
+    collectItems(items, type) {
         return items.filter((item) => {
             if (this.world.character.isColliding(item)) {
                 this.increaseCollectedCount(type);
@@ -174,7 +174,7 @@ class WorldCollisions {
      * Increments the collected counter and updates the corresponding status bar.
      * @param {string} type - 'coins' or 'bottles'.
      */
-    increaseCollectedCount(type){
+    increaseCollectedCount(type) {
         const w = this.world;
         if (type === 'coins') {
             w.collectedCoins++;
