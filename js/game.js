@@ -76,6 +76,7 @@ function showStartButton() {
 /** Restarts the game by calling World.reset() without a page reload. */
 function restartGame() {
     hideEndscreen();
+    document.getElementById('mobile-controls').hidden = false;
     if (world) {
         world.reset();
     }
@@ -121,6 +122,7 @@ function startEndscreenWatcher() {
 /** Shows the endscreen overlay (Restart + Home buttons). */
 function showEndscreen() {
     document.getElementById('endscreen').hidden = false;
+    document.getElementById('mobile-controls').hidden = true;
 }
 
 /** Hides the endscreen overlay. */
