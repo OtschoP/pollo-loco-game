@@ -35,6 +35,10 @@ class World {
     collectedBottles = 0;
     /** Total bottles available in the level. */
     maxBottles = 0;
+    /** Cooldown (ms) between bottle throws. */
+    bottleThrowCooldownMs = 350;
+    /** Timestamp until which no bottle can be thrown. */
+    nextBottleThrowAt = 0;
     /** Whether the throw key was pressed in the previous tick (edge detection). */
     throwKeyPressed = false;
     /** Cooldown (ms) between taking enemy damage. */
@@ -200,6 +204,7 @@ class World {
         this.cameraX = 0;
         this.previousCharacterBottom = null;
         this.throwKeyPressed = false;
+        this.nextBottleThrowAt = 0;
         this.canTakeDamage = true;
         this.resetPressedKeys();
     }
@@ -215,7 +220,10 @@ class World {
     /** Returns whether a new throwable bottle should be spawned this tick. */
     canThrow() {
         return !this.isGameOver && !this.isGameWon && !this.character.isRemovedFromWorld &&
-            this.keyboard.D && !this.throwKeyPressed && this.collectedBottles > 0;
+            this.keyboard.D &&
+            !this.throwKeyPressed &&
+            this.collectedBottles > 0 &&
+            Date.now() >= this.nextBottleThrowAt;
     }
 
     /** Creates a throwable bottle and updates inventory/UI state. */
@@ -231,6 +239,7 @@ class World {
         this.character.markActivity();
         this.collectedBottles--;
         this.updateBottleStatusBar();
+        this.nextBottleThrowAt = Date.now() + this.bottleThrowCooldownMs;
         this.soundManager.play('bottleThrow');
     }
 
