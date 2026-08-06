@@ -3,6 +3,8 @@
  * @extends MoveableObject
  */
 class ThrowableObject extends MoveableObject {
+    /** Fixed y-position where the bottle hits the ground. */
+    groundY = 360;
     /** Horizontal throw speed. */
     speedX = 0;
     /** Whether the splash animation has started. */

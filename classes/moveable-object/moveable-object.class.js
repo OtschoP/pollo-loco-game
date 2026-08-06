@@ -14,6 +14,8 @@ class MoveableObject extends DrawableObject {
     speedY = 0;
     /** Gravity acceleration applied per tick. */
     acceleration = 2;
+    /** Fixed y-position where this object rests on the ground. */
+    groundY = 180;
 
     /** Timestamp of the last hit taken (ms). */
     lastHit = 0;
@@ -52,6 +54,9 @@ class MoveableObject extends DrawableObject {
             if (this.isAboveGround() || this.speedY > 0) {
                 this.y -= this.speedY;
                 this.speedY -= this.acceleration;
+            } else {
+                this.y = this.groundY;
+                this.speedY = 0;
             }
         }, 1000 / 25)
     }
@@ -62,12 +67,7 @@ class MoveableObject extends DrawableObject {
      * @returns {boolean} `true` if the object is airborne.
      */
     isAboveGround() {
-        if (this instanceof ThrowableObject) {
-            return this.y < 360;
-        } else {
-            return this.y < 180;
-        }
-
+        return this.y < this.groundY;
     }
 
     /**
@@ -103,7 +103,7 @@ class MoveableObject extends DrawableObject {
      * Returns whether the object was hit within the last 0.3 seconds.
      * @returns {boolean} `true` if currently in the hurt window.
      */
-    isHurt(){
+    isHurt() {
         let timepassed = new Date().getTime() - this.lastHit;
         timepassed = timepassed / 1000;
         return timepassed < 0.3;
@@ -128,7 +128,7 @@ class MoveableObject extends DrawableObject {
      * Returns whether the object has zero or negative energy.
      * @returns {boolean} `true` if dead.
      */
-    isDead(){
+    isDead() {
         return this.energy <= 0;
     }
 
