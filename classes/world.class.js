@@ -57,6 +57,8 @@ class World {
     rafId = null;
     /** Renderer instance handling all canvas drawing. */
     renderer;
+    /** Timeout ID for delayed animation stop after game end. */
+    stopAnimationsTimeoutId = null;
 
     /**
      * Creates a new World, initialises the level, and starts the game loop.
@@ -143,6 +145,26 @@ class World {
         }
     }
 
+    /** Stops all actor animations shortly after the game has ended. */
+    stopAnimationsAfterDelay() {
+        if (this.stopAnimationsTimeoutId !== null) {
+            return;
+        }
+
+        this.stopAnimationsTimeoutId = setTimeout(() => {
+            this.stopAllActors();
+            this.stopAnimationsTimeoutId = null;
+        }, 1000);
+    }
+
+    /** Clears the delayed animation stop timeout if it is still pending. */
+    clearStopAnimationsTimeout() {
+        if (this.stopAnimationsTimeoutId !== null) {
+            clearTimeout(this.stopAnimationsTimeoutId);
+            this.stopAnimationsTimeoutId = null;
+        }
+    }
+
     /** Stops all timers on the character, enemies, and throwable bottles. */
     stopAllActors() {
         this.character?.stopTimers?.();
@@ -152,6 +174,7 @@ class World {
 
     /** Resets the entire game state (level, character, flags) and restarts the loop without a page reload. */
     reset() {
+        this.clearStopAnimationsTimeout();
         this.stop();
         this.stopAllActors();
         this.soundManager.stopAll();
@@ -182,7 +205,7 @@ class World {
     }
 
     /** Spawns a new throwable bottle when the throw key is pressed and bottles are available. */
-    checkThrowableObjects(){
+    checkThrowableObjects() {
         if (this.canThrow()) {
             this.spawnBottle();
         }
@@ -220,6 +243,7 @@ class World {
             this.soundManager.stop('snore');
             this.soundManager.stop('footsteps');
             this.soundManager.play('youLose');
+            this.stopAnimationsAfterDelay();
         }
     }
 
@@ -244,6 +268,7 @@ class World {
         this.soundManager.stop('snore');
         this.soundManager.stop('footsteps');
         this.soundManager.play('youWin');
+        this.stopAnimationsAfterDelay();
     }
 
     /** Resets all keyboard flags to false. */
