@@ -308,7 +308,7 @@ class World {
 
     /** Updates the bottle status bar based on collected/total bottles. */
     updateBottleStatusBar() {
-        const percentage = (this.collectedBottles / this.maxBottles) * 100;
+        const percentage = ((this.collectedBottles + 2) / this.maxBottles) * 100;
         this.bottleStatusBar.setPercentage(percentage);
     }
 
