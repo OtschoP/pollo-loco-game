@@ -51,7 +51,7 @@ class ThrowableObject extends MoveableObject {
     }
 
     /** Applies gravity, horizontal movement, splash detection, and rotation. */
-    throw(){
+    throw() {
         this.speedY = 20;
         this.speedX = 10;
         this.applyGravity();
@@ -89,11 +89,11 @@ class ThrowableObject extends MoveableObject {
     }
 
     /** Stops flight timers and plays the splash animation once, then marks for removal. */
-    startSplashAnimation() {
+    startSplashAnimation(x = this.x, y = this.y) {
         if (this.hasSplashed) {
             return;
         }
-        this.prepareSplashAnimation();
+        this.prepareSplashAnimation(x, y);
         let splashFrame = 0;
         this.splashAnimationInterval = this._registerInterval(() => {
             splashFrame = this.playSplashFrame(splashFrame);
@@ -101,14 +101,13 @@ class ThrowableObject extends MoveableObject {
     }
 
     /** Stops flight and positions the bottle for splash frames. */
-    prepareSplashAnimation() {
+    prepareSplashAnimation(x, y) {
         this.hasSplashed = true;
         this.soundManager?.play('bottleSplash');
-        this.y = 360;
+        this.x = x;
+        this.y = Math.min(y, 360);
         this.speedY = 0;
-        clearInterval(this.throwInterval);
-        clearInterval(this.splashCheckInterval);
-        clearInterval(this.rotationAnimationInterval);
+        this.stopTimers();
     }
 
     /** Plays one splash frame and returns the next frame index. */
