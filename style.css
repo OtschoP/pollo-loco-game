@@ -288,8 +288,8 @@ canvas {
 
 #impressum-dialog {
     font-family: Arial, Helvetica, sans-serif;
-    max-height: calc(100dvh - 32px);
-    overflow-y: auto;
+    max-height: calc(100dvh - 2px);
+    overflow-y: scroll;
 }
 
 .modal::backdrop {
