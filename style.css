@@ -80,6 +80,14 @@ h1 {
     outline: none;
 }
 
+#fullscreen-button {
+    display: none;
+}
+
+.game-started #fullscreen-button {
+    display: block;
+}
+
 .game-stage {
     position: relative;
     display: flex;
