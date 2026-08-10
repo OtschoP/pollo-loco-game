@@ -47,7 +47,6 @@
     }
 }
 
-/* Auf Tablets den verfügbaren Bildschirm besser nutzen. */
 @media (pointer: coarse) and (min-width: 721px) {
     .game-stage {
         width: min(1200px, calc(100vw - 32px), calc(150dvh - 32px));
@@ -123,7 +122,6 @@
     }
 }
 
-/* Fullscreen auf Touch-Geräten ausblenden, da Mobile-Browser ihn uneinheitlich unterstützen. */
 @media (pointer: coarse) {
     .top-bar {
         display: none;
@@ -134,10 +132,9 @@
     }
 }
 
-/* Mobile Steuerung auf Touch- und kleinen Spiel-Viewports anzeigen. */
 @media (hover: none) and (pointer: coarse),
-       (max-width: 900px),
-       (max-height: 520px) {
+(max-width: 900px),
+(max-height: 520px) {
     .game-started .mobile-controls:not([hidden]) {
         position: fixed;
         left: 0;
@@ -149,7 +146,6 @@
     }
 }
 
-/* Mobil im Hochformat: Drehe-Hinweis */
 @media (orientation: portrait) and (hover: none) and (pointer: coarse) {
     #turn-device {
         display: flex !important;
