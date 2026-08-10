@@ -244,7 +244,10 @@ class Character extends MoveableObject {
         this.playSleepAnimation();
     }
 
-    /** Returns whether enough inactivity time has passed to sleep. */
+    /**
+     * Returns whether enough inactivity time has passed to sleep.
+     * @returns {boolean} `true` if the character can enter sleep animation.
+     */
     canSleep() {
         return Date.now() - this.lastActivityAt >= this.sleepDelayMs;
     }

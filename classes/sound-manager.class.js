@@ -37,7 +37,10 @@ class SoundManager {
         this.applyMutedState();
     }
 
-    /** Creates and stores all configured game audio elements. */
+    /**
+ * Creates and stores all configured game audio elements.
+ * @returns {void}
+ */
     initSounds() {
         this.sounds = SOUND_DEFINITIONS.reduce((sounds, definition) => {
             sounds[definition.name] = this.createAudio(definition.src, definition.volume, definition.loop);
@@ -94,7 +97,7 @@ class SoundManager {
         sound.currentTime = 0;
         sound.muted = this.muted;
         if (!this.muted) {
-            sound.play().catch(() => {});
+            sound.play().catch(() => { });
         }
     }
 
@@ -161,7 +164,7 @@ class SoundManager {
 
         if (!this.muted) {
             this.activeLoops.forEach((name) => {
-                this.sounds[name]?.play().catch(() => {});
+                this.sounds[name]?.play().catch(() => { });
             });
         }
     }

@@ -112,7 +112,11 @@ class ThrowableObject extends MoveableObject {
         this.stopTimers();
     }
 
-    /** Plays one splash frame and returns the next frame index. */
+    /**
+     * Plays one splash frame and returns the next frame index.
+     * @param {number} splashFrame - Current splash animation frame index.
+     * @returns {number} Next splash animation frame index.
+     */
     playSplashFrame(splashFrame) {
         this.img = this.imageCache[this.IMAGES_SPLASH[splashFrame]];
         const nextFrame = splashFrame + 1;

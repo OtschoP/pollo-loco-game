@@ -251,7 +251,10 @@ function setKey(key, value) {
     keyboard[key] = value;
 }
 
-/** Returns whether keyboard input should currently affect the game. */
+/**
+ * Returns whether keyboard input should currently affect the game.
+ * @returns {boolean} `true` if keyboard input can be handled.
+ */
 function canHandleKeyboardInput() {
     return world && !world.isGameOver && !world.isGameWon;
 }

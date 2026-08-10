@@ -219,7 +219,10 @@ class World {
         this.throwKeyPressed = this.keyboard.D;
     }
 
-    /** Returns whether a new throwable bottle should be spawned this tick. */
+    /**
+     * Returns whether a new throwable bottle should be spawned this tick.
+     * @returns {boolean} `true` if a throwable bottle can be spawned.
+     */
     canThrow() {
         return !this.isGameOver && !this.isGameWon && !this.character.isRemovedFromWorld &&
             this.keyboard.D &&
@@ -265,7 +268,10 @@ class World {
         }
     }
 
-    /** Returns whether every endboss in the level has died. */
+    /**
+     * Returns whether every endboss in the level has died.
+     * @returns {boolean} `true` if all endbosses are dead.
+     */
     areAllEndbossesDead() {
         const endbosses = this.getEndbosses();
         return endbosses.length > 0 && endbosses.every((endboss) => endboss.isDead());

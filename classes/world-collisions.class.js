@@ -203,7 +203,7 @@ class WorldCollisions {
      * @param {MoveableObject} enemy - The enemy to check.
      * @param {Object} characterHitbox - Character hitbox edges.
      * @param {number} previousCharacterBottom - Character bottom y in the previous frame.
-     * @returns {boolean} `true` if this is a stomp collision.
+     * @returns {boolean} `true` if the character hits a chicken-type enemy from above.
      */
     isStompCollision(enemy, characterHitbox, previousCharacterBottom) {
         const w = this.world;
