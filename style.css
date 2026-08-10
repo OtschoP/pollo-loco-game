@@ -53,8 +53,10 @@ h1 {
 
 .top-actions {
     position: absolute;
-    right: 8px;
+    left: 50%;
+    right: auto;
     top: 8px;
+    transform: translateX(-50%);
     display: flex;
     gap: 8px;
     z-index: 6;

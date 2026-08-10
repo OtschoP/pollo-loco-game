@@ -15,7 +15,6 @@
 
     .top-actions {
         top: 6px;
-        right: 6px;
         gap: 6px;
     }
 
@@ -70,7 +69,6 @@
 
     .top-actions {
         top: 4px;
-        right: 4px;
         gap: 4px;
     }
 
@@ -127,11 +125,13 @@
 
 /* Fullscreen auf Touch-Geräten ausblenden, da Mobile-Browser ihn uneinheitlich unterstützen. */
 @media (pointer: coarse) {
-    .top-bar {
+    #fullscreen-button {
         display: none;
     }
+}
 
-    #fullscreen-button {
+@media (pointer: coarse) and (max-height: 700px) {
+    .top-bar {
         display: none;
     }
 }
