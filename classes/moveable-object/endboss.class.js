@@ -109,9 +109,9 @@ class Endboss extends MoveableObject {
         if (this.isAttacking) {
             this.playAttackAnimationOnce();
         } else if (this.isActivated) {
-            this.playAnimation(this.IMAGES_ALERT);
-        } else {
             this.playAnimation(this.IMAGES_WALKING);
+        } else {
+            this.playAnimation(this.IMAGES_ALERT);
         }
     }
 
