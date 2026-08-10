@@ -200,7 +200,7 @@ function wireMuteButton() {
 function updateMuteButton() {
     const muteButton = document.getElementById('mute-button');
     const isMuted = soundManager.isMuted();
-    muteButton.textContent = isMuted ? '×' : '♪';
+    muteButton.textContent = isMuted ? '♪̸' : '♪';
     muteButton.setAttribute('aria-label', isMuted ? 'Ton einschalten' : 'Ton ausschalten');
 }
 
