@@ -1,4 +1,7 @@
-/** Creates normal-sized chicken enemies at fixed base positions with randomised offset and speed. */
+/**
+ * Creates normal-sized chicken enemies at fixed base positions with randomised offset and speed.
+ * @returns {Chicken[]} Array of normal chicken enemy instances.
+ */
 function createChickens() {
     const basePositions = [320, 540, 760, 980, 1200, 1420, 1640, 1860];
 
@@ -9,7 +12,10 @@ function createChickens() {
     });
 }
 
-/** Creates small chicken enemies at fixed base positions with randomised offset and speed. */
+/**
+ * Creates small chicken enemies at fixed base positions with randomised offset and speed.
+ * @returns {ChickenSmall[]} Array of small chicken enemy instances.
+ */
 function createSmallChickens() {
     const basePositions = [450, 890, 1330, 1770];
 
@@ -20,7 +26,10 @@ function createSmallChickens() {
     });
 }
 
-/** Creates the level's cloud layer. */
+/**
+ * Creates the level's cloud layer.
+ * @returns {Cloud[]} Array of cloud instances.
+ */
 function createClouds() {
     return [
         new Cloud(-250, 20, 0.1),
@@ -31,12 +40,20 @@ function createClouds() {
     ];
 }
 
-/** Creates all scrolling background layers. */
+/**
+ * Creates all scrolling background layers.
+ * @returns {BackgroundObject[]} Array of background object instances.
+ */
 function createBackgroundObjects() {
     return [-719, 0, 719, 719 * 2, 719 * 3].flatMap((x, index) => createBackgroundSet(x, index));
 }
 
-/** Creates one parallax background set at the given x-position. */
+/**
+ * Creates one parallax background set at the given x-position.
+ * @param {number} x - The x-coordinate for the background set.
+ * @param {number} index - Index used to alternate background image sides.
+ * @returns {BackgroundObject[]} Array of background objects for the set.
+ */
 function createBackgroundSet(x, index) {
     const side = index % 2 === 0 ? '2' : '1';
     return [
@@ -47,7 +64,10 @@ function createBackgroundSet(x, index) {
     ];
 }
 
-/** Creates all collectible coins. */
+/**
+ * Creates all collectible coins.
+ * @returns {Coin[]} Array of collectible coin instances.
+ */
 function createCoins() {
     return [
         new Coin(320, 220, 0),
@@ -58,7 +78,10 @@ function createCoins() {
     ];
 }
 
-/** Creates all collectible bottles. */
+/**
+ * Creates all collectible bottles.
+ * @returns {Bottle[]} Array of collectible bottle instances.
+ */
 function createBottles() {
     const positions = [300, 430, 560, 720, 860, 1010, 1160, 1310, 1460, 1610, 1760, 1910, 2020, 2085, 2140];
     return positions.map((x, index) => new Bottle(x, 340, index % 2));
