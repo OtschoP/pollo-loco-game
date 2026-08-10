@@ -94,6 +94,10 @@ class StatusBar extends DrawableObject {
      * @returns {number} Index into the IMAGES array.
      */
     resolveImageIndex() {
-        return Math.min(Math.floor(this.percentage / 20), 5);
+        if (this.percentage === 0) {
+            return 0;
+        }
+
+        return Math.min(Math.ceil(this.percentage / 20), 5);
     }
 }
