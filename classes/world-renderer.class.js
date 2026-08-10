@@ -21,9 +21,9 @@ class WorldRenderer {
     draw() {
         this.prepareFrame();
         this.drawScrollableWorld();
-        this.drawFixedUi();
         this.drawEndbossInForeground();
         this.drawCharacterIfVisible();
+        this.drawFixedUi();
         this.drawGameOverIfReady();
         this.drawWinIfReady();
         this.scheduleNextFrame();
