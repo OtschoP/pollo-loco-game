@@ -14,14 +14,14 @@ class WorldCollisions {
     }
 
     /** Dispatches all collision checks (enemy, bottle, collectible). */
-    checkCollisions(){
+    checkCollisions() {
         this.checkEnemyCollisions();
         this.checkBottleCollisions();
         this.checkCollectibleCollisions();
     }
 
     /** Checks character-vs-enemy collisions (stomp, damage, endboss attack). */
-    checkEnemyCollisions(){
+    checkEnemyCollisions() {
         const w = this.world;
         const characterCanInteract = !w.character.isRemovedFromWorld && !w.character.isDead();
         const characterHitbox = w.character.getHitbox();
@@ -72,11 +72,21 @@ class WorldCollisions {
     handleStomp(enemy) {
         enemy.die();
         this.world.soundManager.play('chickenDeath');
+        this.preventDamageAfterStomp();
         this.bounceAfterStomp();
     }
 
+    /** Temporarily prevents enemy damage immediately after a successful stomp. */
+    preventDamageAfterStomp() {
+        const w = this.world;
+        w.canTakeDamage = false;
+        setTimeout(() => {
+            w.canTakeDamage = true;
+        }, w.stompDamageCooldownMs);
+    }
+
     /** Applies damage to the character and starts the damage cooldown. */
-    handleCharacterDamage(){
+    handleCharacterDamage() {
         const w = this.world;
         if (!w.canTakeDamage) {
             return;
@@ -91,7 +101,7 @@ class WorldCollisions {
     }
 
     /** Checks all throwable bottles for enemy hits. */
-    checkBottleCollisions(){
+    checkBottleCollisions() {
         const w = this.world;
         for (const bottle of w.throwableObjects) {
             if (bottle.hasSplashed || bottle.isMarkedForRemoval) {
@@ -143,7 +153,7 @@ class WorldCollisions {
     }
 
     /** Checks character collisions with collectible coins and bottles. */
-    checkCollectibleCollisions(){
+    checkCollectibleCollisions() {
         const w = this.world;
         if (w.character.isRemovedFromWorld || w.character.isDead()) {
             return;

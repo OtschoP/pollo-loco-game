@@ -43,6 +43,8 @@ class World {
     throwKeyPressed = false;
     /** Cooldown (ms) between taking enemy damage. */
     enemyHitCooldownMs = 600;
+    /** Short damage immunity after stomping an enemy. */
+    stompDamageCooldownMs = 250;
     /** Whether the character can currently take damage. */
     canTakeDamage = true;
     /** Whether the game is over (character dead). */
