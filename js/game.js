@@ -189,7 +189,7 @@ function wireFullscreen() {
 /** Toggles between fullscreen and windowed mode using the Fullscreen API. */
 function toggleFullscreen() {
     if (!document.fullscreenElement) {
-        document.documentElement.requestFullscreen?.();
+        canvas.requestFullscreen?.();
         return;
     }
     document.exitFullscreen?.();

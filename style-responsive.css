@@ -121,6 +121,13 @@
     }
 }
 
+/* Fullscreen auf Touch-Geräten ausblenden, da Mobile-Browser ihn uneinheitlich unterstützen. */
+@media (pointer: coarse) {
+    #fullscreen-button {
+        display: none;
+    }
+}
+
 /* Mobile Steuerung auf Touch- und kleinen Spiel-Viewports anzeigen. */
 @media (hover: none) and (pointer: coarse),
        (max-width: 900px),
