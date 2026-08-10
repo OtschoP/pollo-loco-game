@@ -12,6 +12,15 @@ let hasGameStarted = false;
 let startScreenImage = new Image();
 /** Interval ID for the endscreen watcher. */
 let endscreenWatcherId = null;
+/** Maps keyboard event key codes to Keyboard state properties. */
+const KEY_MAP = {
+    37: 'LEFT',
+    38: 'UP',
+    39: 'RIGHT',
+    40: 'DOWN',
+    32: 'SPACE',
+    68: 'D'
+};
 
 
 /** Entry point: sets up the canvas, start screen, UI, and touch controls. */
@@ -241,15 +250,6 @@ function setKey(key, value) {
     }
     keyboard[key] = value;
 }
-
-const KEY_MAP = {
-    37: 'LEFT',
-    38: 'UP',
-    39: 'RIGHT',
-    40: 'DOWN',
-    32: 'SPACE',
-    68: 'D'
-};
 
 /** Returns whether keyboard input should currently affect the game. */
 function canHandleKeyboardInput() {
