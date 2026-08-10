@@ -79,7 +79,7 @@
     }
 
     .game-stage {
-        width: min(calc(100vw - 8px), calc(150dvh - 8px));
+        width: min(calc(100vw), calc(150dvh));
     }
 
     .start-button {
