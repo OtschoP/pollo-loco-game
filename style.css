@@ -276,6 +276,10 @@ canvas {
     max-width: min(90vw, 420px);
 }
 
+#impressum-dialog {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
 .modal::backdrop {
     background: rgba(0, 0, 0, 0.6);
 }
