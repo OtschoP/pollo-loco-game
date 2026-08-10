@@ -50,7 +50,7 @@
 /* Auf Tablets den verfügbaren Bildschirm besser nutzen. */
 @media (pointer: coarse) and (min-width: 721px) {
     .game-stage {
-        width: min(900px, calc(100vw - 32px), calc(150dvh - 32px));
+        width: min(1200px, calc(100vw - 32px), calc(150dvh - 32px));
     }
 }
 
@@ -125,13 +125,11 @@
 
 /* Fullscreen auf Touch-Geräten ausblenden, da Mobile-Browser ihn uneinheitlich unterstützen. */
 @media (pointer: coarse) {
-    .game-started #fullscreen-button {
+    .top-bar {
         display: none;
     }
-}
 
-@media (pointer: coarse) and (max-height: 700px) {
-    .top-bar {
+    .game-started #fullscreen-button {
         display: none;
     }
 }
